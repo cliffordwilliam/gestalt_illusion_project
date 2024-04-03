@@ -27,11 +27,6 @@ class Kinematic:
         if a.camera == None:
             return
 
-        # region Handle walk against wall
-        if self.is_on_wall and self.is_on_floor:
-            self.owner.velocity.x = 0
-        # endregion Handle walk against wall
-
         # region Update direction sign for movement
         direction_x = 0
         if self.owner.velocity.x > 0:
@@ -387,3 +382,8 @@ class Kinematic:
                 self.owner.rect.y += direction_y
                 self.owner.rect.clamp_ip(a.camera.rect)
         # endregion Update vertical position
+
+        # region Handle walk against wall
+        if self.is_on_wall and self.is_on_floor:
+            self.owner.velocity.x = 0
+        # endregion Handle walk against wall
