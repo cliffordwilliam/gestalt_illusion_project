@@ -1,0 +1,72 @@
+{
+  "burn": {
+    "is_loop": 1,
+    "next_animation": 0,
+    "frames_list": [
+      {
+        "region": [336, 400, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [352, 400, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [368, 400, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [384, 400, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [400, 400, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [416, 400, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [432, 400, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [448, 400, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [464, 400, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [480, 400, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [336, 416, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [352, 416, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [368, 416, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [384, 416, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [400, 416, 16, 16],
+        "duration": 50
+      },
+      {
+        "region": [416, 416, 16, 16],
+        "duration": 50
+      }
+    ]
+  }
+}

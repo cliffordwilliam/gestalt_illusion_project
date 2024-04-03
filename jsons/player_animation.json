@@ -1,0 +1,402 @@
+{
+  "idle": {
+    "is_loop": 1,
+    "next_animation": 0,
+    "frames_list": [
+      {
+        "region": [0, 0, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [48, 0, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [96, 0, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [144, 0, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [192, 0, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [240, 0, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [288, 0, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [336, 0, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [384, 0, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [0, 48, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [48, 48, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [96, 48, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "idle_to_run": {
+    "is_loop": 0,
+    "next_animation": "run",
+    "frames_list": [
+      {
+        "region": [144, 48, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [192, 48, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "run": {
+    "is_loop": 1,
+    "next_animation": 0,
+    "frames_list": [
+      {
+        "region": [240, 48, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [288, 48, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [336, 48, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [384, 48, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [0, 96, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [48, 96, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [96, 96, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [144, 96, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "run_to_idle": {
+    "is_loop": 0,
+    "next_animation": "idle",
+    "frames_list": [
+      {
+        "region": [192, 96, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [240, 96, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [288, 96, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [336, 96, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "crouch": {
+    "is_loop": 0,
+    "next_animation": 0,
+    "frames_list": [
+      {
+        "region": [384, 96, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [0, 144, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "crouch_to_idle": {
+    "is_loop": 0,
+    "next_animation": "idle",
+    "frames_list": [
+      {
+        "region": [192, 192, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [240, 192, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "turn": {
+    "is_loop": 0,
+    "next_animation": "run",
+    "frames_list": [
+      {
+        "region": [336, 336, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [288, 336, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [48, 144, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "hurt": {
+    "is_loop": 0,
+    "next_animation": 0,
+    "frames_list": [
+      {
+        "region": [96, 144, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "up": {
+    "is_loop": 1,
+    "next_animation": 0,
+    "frames_list": [
+      {
+        "region": [144, 144, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [192, 144, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [240, 144, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "down": {
+    "is_loop": 1,
+    "next_animation": 0,
+    "frames_list": [
+      {
+        "region": [384, 144, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [0, 192, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [48, 192, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "up_to_down": {
+    "is_loop": 0,
+    "next_animation": "down",
+    "frames_list": [
+      {
+        "region": [288, 144, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [336, 144, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "land": {
+    "is_loop": 0,
+    "next_animation": "idle",
+    "frames_list": [
+      {
+        "region": [96, 192, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [144, 192, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [192, 192, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [240, 192, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "gun": {
+    "is_loop": 0,
+    "next_animation": "idle",
+    "frames_list": [
+      {
+        "region": [288, 192, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [336, 192, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [384, 192, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [0, 240, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [48, 240, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "air_gun": {
+    "is_loop": 0,
+    "next_animation": "up",
+    "frames_list": [
+      {
+        "region": [96, 240, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [144, 240, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [192, 240, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [240, 240, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [288, 240, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "crouch_gun": {
+    "is_loop": 0,
+    "next_animation": "crouch",
+    "frames_list": [
+      {
+        "region": [336, 240, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [384, 240, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [0, 288, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [48, 288, 48, 48],
+        "duration": 100
+      },
+      {
+        "region": [96, 288, 48, 48],
+        "duration": 100
+      }
+    ]
+  },
+  "machine": {
+    "is_loop": 0,
+    "next_animation": "idle",
+    "frames_list": [
+      {
+        "region": [144, 288, 48, 48],
+        "duration": 66
+      },
+      {
+        "region": [192, 288, 48, 48],
+        "duration": 66
+      },
+      {
+        "region": [240, 288, 48, 48],
+        "duration": 66
+      },
+      {
+        "region": [288, 288, 48, 48],
+        "duration": 66
+      }
+    ]
+  },
+  "machine_air": {
+    "is_loop": 0,
+    "next_animation": "up",
+    "frames_list": [
+      {
+        "region": [336, 288, 48, 48],
+        "duration": 66
+      },
+      {
+        "region": [384, 288, 48, 48],
+        "duration": 66
+      },
+      {
+        "region": [0, 336, 48, 48],
+        "duration": 66
+      },
+      {
+        "region": [48, 336, 48, 48],
+        "duration": 66
+      }
+    ]
+  },
+  "machine_crouch": {
+    "is_loop": 0,
+    "next_animation": "crouch",
+    "frames_list": [
+      {
+        "region": [96, 336, 48, 48],
+        "duration": 66
+      },
+      {
+        "region": [144, 336, 48, 48],
+        "duration": 66
+      },
+      {
+        "region": [192, 336, 48, 48],
+        "duration": 66
+      },
+      {
+        "region": [240, 336, 48, 48],
+        "duration": 66
+      }
+    ]
+  }
+}

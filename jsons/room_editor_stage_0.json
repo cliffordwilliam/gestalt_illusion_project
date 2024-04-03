@@ -1,0 +1,59 @@
+{
+  "SPRITE_SHEET_PNG_NAME": "stage_0_sprite_sheet.png",
+  "TOTAL_LAYERS": 1,
+  "BITMASK_TYPE_SPRITE_NAMES": [],
+  "V_BITMASK_TYPE_SPRITE_NAMES": [],
+  "H_BITMASK_TYPE_SPRITE_NAMES": [],
+  "MIX_BITMASK_TYPE_SPRITE_NAMES": [],
+  "COLIISION_LAYER_I": 0,
+  "SPRITES": [
+    {
+      "name": "Solid",
+      "type": "Solid",
+      "xds": 0,
+      "yds": 0,
+      "layer_i": 0,
+      "region": [0, 0, 16, 16]
+    },
+    {
+      "name": "Thin",
+      "type": "Thin",
+      "xds": 0,
+      "yds": 0,
+      "layer_i": 0,
+      "region": [16, 0, 16, 16]
+    },
+    {
+      "name": "LeftDoor",
+      "type": "Door",
+      "xds": 0,
+      "yds": 0,
+      "layer_i": 0,
+      "region": [32, 0, 16, 16]
+    },
+    {
+      "name": "RightDoor",
+      "type": "Door",
+      "xds": 0,
+      "yds": 0,
+      "layer_i": 0,
+      "region": [48, 0, 16, 16]
+    },
+    {
+      "name": "UpDoor",
+      "type": "Door",
+      "xds": 0,
+      "yds": 0,
+      "layer_i": 0,
+      "region": [64, 0, 16, 16]
+    },
+    {
+      "name": "DownDoor",
+      "type": "Door",
+      "xds": 0,
+      "yds": 0,
+      "layer_i": 0,
+      "region": [80, 0, 16, 16]
+    }
+  ]
+}
