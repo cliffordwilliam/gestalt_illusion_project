@@ -3,6 +3,27 @@ import autoload as a
 
 
 class Room:
+    '''
+    How to use: 
+        1: Give me room name
+        2: Room name is used to load json game room, not editor
+        3: Room data is extracted
+        4: There are bg layers and 1 collision layer, collision layer is the lookup table
+        5: I have room rect for camera limit and player reposition after transition
+        6: Manually typed bg is also extracted to draw the hard coded background, make sure that you type in the correct available bg for distict stages
+        7: Use my name setter to change room, if new room is in same stage, I will not re import the image for this stage
+        8: Any sprite names that are in game actors list, will be instanced and placed in layer, replacing the dict
+
+    What will happen:
+        1: You need to call my bg layer draw, This func, for every frame draws the bg
+        2: Same goes with fg, fg includes the collision layer first, then the fg
+        3: I have update func to update all actors in my bg layers
+
+    TODO: Add an actor layer, where enemies, or wahtever that is moving around like the player has to be placed into -> then use quad tree for collision check. place quadtree as big as room size
+    TODO: Start with a bouncing ball in a room, that goes in linear speed, if it collide with solid static tiles, bounce, use lookup map for that. Then if it hits moving placer, bounce too, use quad tree for that
+    TODO: What if it is inside the collision layer? Then have it update its position in the lookup table, like a moving floor - NVM, if 2 actors of small hitbox are in same tile, they wont detect each other
+    '''
+
     def __init__(self, name):
         # Get room name
         self.name = name

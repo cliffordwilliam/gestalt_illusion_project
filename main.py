@@ -1,12 +1,11 @@
 from constants import *
 from scenes.world import World
 import autoload as a
-# from actors.fire import Fire
 
 
 class Game:
     def __init__(self):
-        # Global debug flag
+        # Global debug flag, press 0 to toggle
         self.is_debug = False
 
         # Resolution and window
@@ -35,11 +34,11 @@ class Game:
 
         # All actors
         self.actors = {
-            # "Fire": Fire
         }
 
     def set_resolution(self, value):
-        # Other resolution
+        # Takes values from 1 to 7
+        # Other resolution values
         if value != 7:
             self.resolution = value
             self.window_w = WINDOW_W * self.resolution
@@ -94,7 +93,7 @@ while 1:
         DEBUG_SURF.fill("red")
     # endregion Clear debug surface
 
-    # Current scene draw
+    # Current scene draw on native
     a.game.current_scene.draw()
 
     # Current scene update

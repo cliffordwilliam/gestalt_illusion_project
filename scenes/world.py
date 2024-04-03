@@ -26,17 +26,23 @@ class World:
         self.transition_curtain.add_event_listener(
             self.on_transition_curtain_full_end, "full_end")
 
-        self.state = "Normal"
+        # World state, room transition, pause, cutscene and so on
+        self.state = "Playing"
 
+        # To remember which door after transition curtain
         self.next_door = None
 
     def on_player_hit_door(self, door):
-        if self.state == "Normal":
+        # Only trigger once, player hit door -> transition state
+        if self.state == "Playing":
             self.next_door = door
             self.state = "Transition"
 
     def on_transition_curtain_empty_end(self):
-        self.state = "Normal"
+        # Return to playing state
+        self.state = "Playing"
+
+        # Reset transition curtain
         self.transition_curtain.curtain.set_alpha(0)
         self.transition_curtain.alpha = 0
         self.transition_curtain.fade_duration = self.transition_curtain.fade_duration
@@ -47,17 +53,20 @@ class World:
     def on_transition_curtain_full_end(self):
         # Change room
         self.change_room()
+
         # Reverse transition curtain direction
         self.transition_curtain.direction *= -1
 
     def change_room(self):
         # region Replace this room with new room
-        door_target = self.next_door["target"]
-        STAGE_NO = door_target["STAGE_NO"]
-        target = door_target["target"]
-        a.room.set_name(f"stage{STAGE_NO}_{target}_game.json")
+        door_data = self.next_door["data"]
 
-        # region Move player and camera to new room
+        # Unpack door data
+        stage_no = door_data["STAGE_NO"]
+        target = door_data["target"]
+        a.room.set_name(f"stage{stage_no}_{target}_game.json")
+
+        # region Move player and camera to new room position
         door_name = self.next_door["name"]
         if door_name == "LeftDoor":
             a.player.rect.right = (
@@ -79,6 +88,7 @@ class World:
         # endregion Move player and camera to new room
 
     def event(self, event):
+        # Player event
         a.player.event(event)
 
     def draw(self):
@@ -98,7 +108,7 @@ class World:
         self.transition_curtain.draw()
 
     def update(self, dt):
-        if self.state == "Normal":
+        if self.state == "Playing":
             # Update player
             a.player.update(dt)
 
@@ -108,6 +118,6 @@ class World:
             # Update all bg sprites actors
             a.room.update(dt)
 
-        if self.state == "Transition":
-            # On transition state, immediately play curtain
+        elif self.state == "Transition":
+            # On transition state, immediately update transition curtain
             self.transition_curtain.update(dt)

@@ -3,6 +3,17 @@ import autoload as a
 
 
 class Camera:
+    '''
+    How to use: 
+        1: Give me target with setter -> [x, y]
+
+    What will happen:
+        1: Store target data in list
+        2: On every frame, clamp target to be a value where the cam will not overshoot limit
+        3: Update camera position to lerp to target position
+        4: Has a debug draw to show target position with draw offset in update method
+    '''
+
     def __init__(self):
         self.rect = pg.FRect(0, 0, NATIVE_W, NATIVE_H)
         self.lerp_weight = 0.1
@@ -21,7 +32,7 @@ class Camera:
         # Prevent target to be in a pos where cam is outside of room x
         self.target_x = self.target[0]
         left = a.room.rect[0]
-        right = a.room.rect[0] + a.room.rect[2]
+        right = left + a.room.rect[2]
         left += NATIVE_W // 2
         right -= NATIVE_W // 2
         self.target_x = max(min(self.target_x, right), left)
@@ -29,7 +40,7 @@ class Camera:
         # Prevent target to be in a pos where cam is outside of room y
         self.target_y = self.target[1]
         top = a.room.rect[1]
-        bottom = a.room.rect[1] + a.room.rect[3]
+        bottom = top + a.room.rect[3]
         top += NATIVE_H // 2
         bottom -= NATIVE_H // 2
         self.target_y = max(min(self.target_y, bottom), top)

@@ -3,6 +3,29 @@ import autoload as a
 
 
 class Kinematic:
+    '''
+    How to use: 
+        1: I am always a child of a moving actor
+        2: Call my move function after you have updated velocity in actor
+        3: Require a callback for me to call and pass what you collided with
+        4: I Have debug draw in my update
+
+    What will happen:
+        1: For every frame, the following is done on x first then y axis
+        2: Get magnitude direction based of vel
+        3: Update is on wall, if input direction is 0, actor is not on wall
+        4: Proceed if there is magnitude direction vel
+        5: Compute displacement from dt and vel, store decimal in remainder, keep the int in displacement
+        6: Do while loop as long as displacement int is not 0, decrease by 1 each iteration
+        7: On each iteration convert pwner pos to index
+        8: Use index to lookup table for collision neighbour checks
+        9: If found something in neighbour, collect in list
+        10: Iterate over every found enighbour cell and do aabb with my next frame pos
+        11: If I did hit something, owner callback on hit. Let owner do what they want based on what it hits, also update is on wall and is on floor
+        12: Did not hit anything? Move owner rect 1 px and go to next iteration
+        13: After updating both x and y, check if I am on floor and is on wall, if yes then take away the owner x velocity
+    '''
+
     def __init__(self, owner):
         # For movement while loop
         self.remainder_x = 0
@@ -27,6 +50,13 @@ class Kinematic:
         if a.camera == None:
             return
 
+        # Debug draw owner real rect
+        if a.game.is_debug:
+            xd = self.owner.rect.x - a.camera.rect.x
+            yd = self.owner.rect.y - a.camera.rect.y
+            pg.draw.rect(DEBUG_SURF, "orange",
+                         (xd, yd, self.owner.rect.width, self.owner.rect.height), 1)
+
         # region Update direction sign for movement
         direction_x = 0
         if self.owner.velocity.x > 0:
@@ -47,11 +77,10 @@ class Kinematic:
 
         # region Update horizontal position
         # Distance to cover horizontally
-        amount = self.owner.velocity.x * dt
-        self.remainder_x += amount
-        displacement_x = round(self.remainder_x)
-
         if direction_x != 0:
+            amount = self.owner.velocity.x * dt
+            self.remainder_x += amount
+            displacement_x = round(self.remainder_x)
             self.remainder_x -= displacement_x
             displacement_x = abs(displacement_x)
 
@@ -62,13 +91,6 @@ class Kinematic:
                                  TILE_S) - a.room.x_tu
                 possible_y_tu = (self.owner.rect.centery //
                                  TILE_S) - a.room.y_tu
-
-                # Debug draw owner real rect
-                if a.game.is_debug:
-                    xd = self.owner.rect.x - a.camera.rect.x
-                    yd = self.owner.rect.y - a.camera.rect.y
-                    pg.draw.rect(NATIVE_SURF, "red",
-                                 (xd, yd, self.owner.rect.width, self.owner.rect.height), 1)
 
                 # Possible positions
                 actor_tl_tu = (possible_x_tu - 1, possible_y_tu - 1)
@@ -183,7 +205,7 @@ class Kinematic:
                     )
 
                 # AABB with all possible neighbours
-                is_collide = False
+                collided_cells = []
                 for cell in possible_cells:
                     # Cell rect
                     c_xds = cell["xds"]
@@ -192,20 +214,18 @@ class Kinematic:
                     c_h = c_yds + TILE_S
                     # Future hit something? Break set flag to true
                     if (c_xds < w and xds < c_w and c_yds < h and yds < c_h):
-                        is_collide = True
-                        break
+                        # Collect overlaps
+                        collided_cells.append(cell)
 
-                # Future hit? Break
-                if is_collide:
-                    # Collision callback
-                    is_stop = self.owner.on_collide(cell)
+                        # Update collision flag
+                        self.is_on_wall = True
 
-                    # Update collision flag
-                    self.is_on_wall = True
+                # Collision callback
+                is_stop = self.owner.on_collide(collided_cells)
 
-                    # Stop?
-                    if is_stop == True:
-                        break
+                # Stop?
+                if is_stop == True:
+                    break
 
                 # Future no hit? Move to next pixel
                 self.is_on_wall = False
@@ -216,11 +236,10 @@ class Kinematic:
 
         # region Update vertical position
         # Distance to cover vertically
-        amount = self.owner.velocity.y * dt
-        self.remainder_y += amount
-        displacement_y = round(self.remainder_y)
-
         if direction_y != 0:
+            amount = self.owner.velocity.y * dt
+            self.remainder_y += amount
+            displacement_y = round(self.remainder_y)
             self.remainder_y -= displacement_y
             displacement_y = abs(displacement_y)
 
@@ -231,13 +250,6 @@ class Kinematic:
                                  TILE_S) - a.room.x_tu
                 possible_y_tu = (self.owner.rect.centery //
                                  TILE_S) - a.room.y_tu
-
-                # Debug draw owner real rect
-                if a.game.is_debug:
-                    xd = self.owner.rect.x - a.camera.rect.x
-                    yd = self.owner.rect.y - a.camera.rect.y
-                    pg.draw.rect(DEBUG_SURF, "red",
-                                 (xd, yd, self.owner.rect.width, self.owner.rect.height), 1)
 
                 # Possible positions
                 actor_tl_tu = (possible_x_tu - 1, possible_y_tu - 1)
@@ -352,7 +364,7 @@ class Kinematic:
                     )
 
                 # AABB with all possible neighbours
-                is_collide = False
+                collided_cells = []
                 for cell in possible_cells:
                     # Cell rect
                     c_xds = cell["xds"]
@@ -361,20 +373,19 @@ class Kinematic:
                     c_h = c_yds + TILE_S
                     # Future hit something? Break set flag to true
                     if (c_xds < w and xds < c_w and c_yds < h and yds < c_h):
-                        is_collide = True
-                        break
+                        # Collect overlaps
+                        collided_cells.append(cell)
 
-                # Future hit? Break
-                if is_collide:
-                    # Collision callback
-                    is_stop = self.owner.on_collide(cell)
+                        # If I am moving down
+                        if direction_y == 1:
+                            self.is_on_floor = True
 
-                    if direction_y == 1:
-                        self.is_on_floor = True
+                # Collision callback
+                is_stop = self.owner.on_collide(collided_cells)
 
-                    # Stop?
-                    if is_stop == True:
-                        break
+                # Stop?
+                if is_stop == True:
+                    break
 
                 # Future no hit? Move to next pixel
                 self.is_on_floor = False

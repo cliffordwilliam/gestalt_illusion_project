@@ -2,6 +2,19 @@ from constants import *
 
 
 class Curtain:
+    '''
+    How to use: 
+        1: Give me duration of 0 -> 255, same value is used for 255 -> 0
+        2: Tell me either to start from 0 or 255
+        3: Optional can give me subs on my 2 events, reach 0 (empty) and reach 255 (full)
+
+    What will happen:
+        1: For every frame I draw my curtain
+        2: My curtain alpha is determined by the timer, timer acts as a position
+        3: Timer is 50% of duration? then 122 is the value. Timer == duration? 255. Timer = 0? 0
+        4: Timer can go from 0 to 255 or 255 to 0 based on direction, update direction to go wherever you want
+    '''
+
     def __init__(self, duration, start="empty"):
         # Empty or full
         self.start = start
@@ -61,29 +74,14 @@ class Curtain:
         # Set alpha
         self.curtain.set_alpha(self.alpha)
 
-        # End reached? Blink prompt
+        # Empty end reched - 0 - invisible?
         if self.fade_timer == 0:
             for callback in self.listener_empty_ends:
                 callback()
-            # self.owner.on_curtain_empty_end()
-            # Transition state is over
-            # self.is_transitioning = False
-            # self.curtain.set_alpha(0)
-            # self.alpha = 0
-            # self.fade_duration = self.fade_duration
-            # self.fade_timer = 0
-            # self.direction = 1
-            # # Remainder and fade early flag
-            # self.remainder = 0
 
-        # Other end reached?
+        # Filled end reached - 255 - pitch black?
         if self.fade_timer == self.fade_duration:
             for callback in self.listener_full_ends:
                 callback()
-            # self.owner.on_curtain_full_end()
-            # # Change room
-            # self.change_room()
-            # # Reverse my direction
-            # self.direction *= -1
             pass
         return

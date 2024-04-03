@@ -14,7 +14,7 @@
       "xds": -624,
       "yds": 0,
       "region": [64, 0, 16, 16],
-      "target": { "STAGE_NO": 0, "target": "gym_tall" }
+      "data": { "STAGE_NO": 0, "target": "gym_tall" }
     },
     {
       "name": "UpDoor",
@@ -22,7 +22,7 @@
       "xds": -608,
       "yds": 0,
       "region": [64, 0, 16, 16],
-      "target": { "STAGE_NO": 0, "target": "gym_tall" }
+      "data": { "STAGE_NO": 0, "target": "gym_tall" }
     },
     {
       "name": "UpDoor",
@@ -30,7 +30,7 @@
       "xds": -592,
       "yds": 0,
       "region": [64, 0, 16, 16],
-      "target": { "STAGE_NO": 0, "target": "gym_tall" }
+      "data": { "STAGE_NO": 0, "target": "gym_tall" }
     },
     {
       "name": "Solid",
@@ -763,7 +763,7 @@
       "xds": -16,
       "yds": 96,
       "region": [48, 0, 16, 16],
-      "target": { "STAGE_NO": 0, "target": "gym_small" }
+      "data": { "STAGE_NO": 0, "target": "gym_small" }
     },
     {
       "name": "Solid",
@@ -816,7 +816,7 @@
       "xds": -16,
       "yds": 112,
       "region": [48, 0, 16, 16],
-      "target": { "STAGE_NO": 0, "target": "gym_small" }
+      "data": { "STAGE_NO": 0, "target": "gym_small" }
     },
     {
       "name": "Solid",
@@ -881,7 +881,7 @@
       "xds": -16,
       "yds": 128,
       "region": [48, 0, 16, 16],
-      "target": { "STAGE_NO": 0, "target": "gym_small" }
+      "data": { "STAGE_NO": 0, "target": "gym_small" }
     },
     {
       "name": "Solid",

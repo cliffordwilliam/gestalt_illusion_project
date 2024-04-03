@@ -51,6 +51,8 @@ if IS_LOAD == "y":
     stage_no = room_data["STAGE_NO"]
     room_name = room_data["ROOM_NAME"]
     layers_list = room_data["LAYERS_LIST"]
+
+# Do not load data
 elif IS_LOAD == "n":
     # Use user input to populate data
     resolution = int(input("Enter RESOLUTION: "))
@@ -964,7 +966,7 @@ while 1:
                     # Handle door select
                     if selected_sprite["type"] == "Door":
                         target = input("Door target: ")
-                        selected_sprite["target"] = {
+                        selected_sprite["data"] = {
                             "STAGE_NO": STAGE_NO, "target": target}
                     selected_layer = LAYERS_LIST[selected_sprite["layer_i"]]
                     is_menu = False

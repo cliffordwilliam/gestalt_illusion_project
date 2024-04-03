@@ -66,7 +66,7 @@ class Player:
         self.animator = Animator(self, self.aniamtion_data, "idle")
 
         # Rect
-        self.rect = pg.FRect(TILE_S, 0, 6, 31)
+        self.rect = pg.FRect(0, 0, 6, 31)
 
         # Movement
         self.max_run = 0.09
@@ -89,52 +89,59 @@ class Player:
             self.rect.center[1]
         ]
 
-        # Thin pass thru counter, given value on start pass, if distance is more than 48px fall, set this to 0
+        # Set to false on next frame immediately after falling 1 frame
         self.is_thin_fall = False
 
     # Called by kinematic
-    def on_collide(self, cell):
+    def on_collide(self, cells):
         # World not ready? Return
         if a.world == None:
-            return
+            return False
 
-        self.collided_cell_type = cell["type"]
-        self.collided_cell_name = cell["name"]
+        # Unpack all found collided cells type and name
+        for cell in cells:
+            self.collided_cell_type = cell["type"]
+            self.collided_cell_name = cell["name"]
 
-        # Found solid?
-        if cell["type"] == "Solid":
-            return True
+            # Prioritize solids, found solid first? Stop
+            if cell["type"] == "Solid":
+                return True
 
-        # Found thin?
-        if cell["type"] == "Thin":
-            # Stop on thin when falling when I am not passing thru it
-            if self.is_thin_fall == False:
-                if not self.velocity.y < 0:
-                    # Player rect cannot overlap, so if distance is 0, foot is flushed to thin top
-                    if (self.rect.bottom - cell["yds"]) == 0:
-                        return True
+            # Found door next? Pass thru it, handle vel
+            elif cell["type"] == "Door":
+                a.world.on_player_hit_door(cell)
 
-        # Found door?
-        if cell["type"] == "Door":
-            a.world.on_player_hit_door(cell)
+                door_name = cell["name"]
+                if door_name == "LeftDoor":
+                    self.velocity.y = 0
+                    self.kinematic.remainder_y = 0
+                    return False
 
-            door_name = cell["name"]
-            if door_name == "LeftDoor":
-                self.velocity.y = 0
-                self.kinematic.remainder_y = 0
+                elif door_name == "RightDoor":
+                    self.velocity.y = 0
+                    self.kinematic.remainder_y = 0
+                    return False
 
-            elif door_name == "RightDoor":
-                self.velocity.y = 0
-                self.kinematic.remainder_y = 0
+                elif door_name == "UpDoor":
+                    self.velocity.y /= 1.25
+                    self.velocity.x = 0
+                    self.kinematic.remainder_x = 0
+                    return False
 
-            elif door_name == "UpDoor":
-                self.velocity.y /= 1.25
-                self.velocity.x = 0
-                self.kinematic.remainder_x = 0
+                elif door_name == "DownDoor":
+                    self.velocity.x = 0
+                    self.kinematic.remainder_x = 0
+                    return False
 
-            elif door_name == "DownDoor":
-                self.velocity.x = 0
-                self.kinematic.remainder_x = 0
+            # Found thin?
+            elif cell["type"] == "Thin":
+                # Not passing thru?
+                if self.is_thin_fall == False:
+                    # If I am falling
+                    if self.velocity.y > 0:
+                        # Player real rect feet flushed on it? Stop
+                        if (self.rect.bottom - cell["yds"]) == 0:
+                            return True
 
     def event(self, event):
         if event.type == pg.KEYDOWN:
@@ -233,6 +240,7 @@ class Player:
                     int(a.camera.rect.x - 1) // NATIVE_W + 1}{
                     int(a.camera.rect.y - 1) // NATIVE_H + 1}", "white"
             )
+            # endregion Draw grid
 
             # region Draw fps
             self.font.render_to(
@@ -364,13 +372,13 @@ class Player:
         if a.game == None:
             return
 
-        # Update debug stuff
+        # region Update debug stuff
         self.collided_cell_type = ""
         self.collided_cell_name = ""
+        # endregion Update debug stuff
 
-        # region Update animation node
+        # Update animation node
         self.animator.update(dt)
-        # endregion Update animation node
 
         # region Debug update
         if a.game.is_debug == True:
@@ -394,9 +402,8 @@ class Player:
             self.velocity.x = 0
         # endregion Update x velocity with direction
 
-        # region Move
+        # Update pos with vel
         self.kinematic.move(dt)
-        # endregion Move
 
         # If previously is thin false was true, then I had moved down by 1px
         self.is_thin_fall = False
@@ -406,9 +413,8 @@ class Player:
             self.old_facing_direction = self.facing_direction
         # endregion Update facing direction and old facing direction
 
-        # region Get horizontal input direction
+        # Get horizontal input direction
         self.direction = self.is_right_pressed - self.is_left_pressed
-        # endregion Get horizontal input direction
 
         # region Update facing direction and old facing direction
         if self.direction != 0:
@@ -481,9 +487,8 @@ class Player:
 
             # Exit jump in just pressed event input
 
-            # region Cannot move direction 0
+            # Cannot move direction 0
             self.direction = 0
-            # endregion Cannot move direction 0
 
         # Up
         elif self.state == "up":
@@ -543,77 +548,65 @@ class Player:
 
             # To crouch
             elif self.state == "crouch":
-                # region Play crouch animation
+                # Play crouch animation
                 self.animator.set_current_animation("crouch")
-                # endregion Play crouch animation
 
             # To up
             elif self.state == "up":
-                # region Set jump vel
+                # Set jump vel
                 self.velocity.y = self.jump_vel
-                # endregion Set jump vel
 
-                # region Play up animation
+                # Play up animation
                 self.animator.set_current_animation("up")
-                # endregion Play up animation
 
             # To down
             elif self.state == "down":
                 # Remove grav build up
                 self.velocity.y = 0
 
-                # region set Heavy gravity
+                # set Heavy gravity
                 self.gravity = self.heavy_gravity
-                # endregion set Heavy gravity
 
-                # region Play up down transition animation
+                # Play up down transition animation
                 self.animator.set_current_animation("up_to_down")
-                # endregion Play up down transition animation
 
         # From run
         elif old_state == "run":
             # To idle
             if self.state == "idle":
-                # region Play run_to_idle animation
+                # Play run_to_idle animation
                 self.animator.set_current_animation("run_to_idle")
-                # endregion Play run_to_idle animation
 
             # To crouch
             elif self.state == "crouch":
-                # region Play crouch animation
+                # Play crouch animation
                 self.animator.set_current_animation("crouch")
-                # endregion Play crouch animation
 
             # To up
             elif self.state == "up":
-                # region Set jump vel
+                # Set jump vel
                 self.velocity.y = self.jump_vel
-                # endregion Set jump vel
 
-                # region Play up animation
+                # Play up animation
                 self.animator.set_current_animation("up")
-                # endregion Play up animation
 
             # To down
             elif self.state == "down":
                 # Remove grav build up
                 self.velocity.y = 0
 
-                # region set Heavy gravity
+                # set Heavy gravity
                 self.gravity = self.heavy_gravity
-                # endregion set Heavy gravity
 
-                # region Play up down transition animation
+                # Play up down transition animation
                 self.animator.set_current_animation("up_to_down")
-                # endregion Play up down transition animation
 
         # From crouch
         elif old_state == "crouch":
             # To idle
             if self.state == "idle":
-                # region Play idle animation
+                # Play idle animation
                 self.animator.set_current_animation("crouch_to_idle")
-                # endregion Play idle animation
 
             # To run
             elif self.state == "run":
@@ -632,50 +625,42 @@ class Player:
 
             # To up
             elif self.state == "up":
-                # region Set jump vel
+                # Set jump vel
                 self.velocity.y = self.jump_vel
-                # endregion Set jump vel
 
-                # region Play up animation
+                # Play up animation
                 self.animator.set_current_animation("up")
-                # endregion Play up animation
 
             # To down
             elif self.state == "down":
                 # Remove grav build up
                 self.velocity.y = 0
 
-                # region set Heavy gravity
+                # set Heavy gravity
                 self.gravity = self.heavy_gravity
-                # endregion set Heavy gravity
 
-                # region Play up down transition animation
+                # Play up down transition animation
                 self.animator.set_current_animation("up_to_down")
-                # endregion Play up down transition animation
 
         # From up
         elif old_state == "up":
             # To down
             if self.state == "down":
-                # region set Heavy gravity
+                # set Heavy gravity
                 self.gravity = self.heavy_gravity
-                # endregion set Heavy gravity
 
-                # region Play up down transition animation
+                # Play up down transition animation
                 self.animator.set_current_animation("up_to_down")
-                # endregion Play up down transition animation
 
         # From down
         elif old_state == "down":
-            # region Reset gravity
+            # Reset gravity
             self.gravity = self.normal_gravity
-            # endregion Reset gravity
 
             # To idle
             if self.state == "idle":
-                # region Play land animation
+                # Play land animation
                 self.animator.set_current_animation("land")
-                # endregion Play land animation
 
             # To run
             if self.state == "run":
@@ -694,6 +679,5 @@ class Player:
 
             # To crouch
             elif self.state == "crouch":
-                # region Play crouch animation
+                # Play crouch animation
                 self.animator.set_current_animation("crouch")
-                # endregion Play crouch animation

@@ -1,1 +1,845 @@
-{"RESOLUTION": 4, "ROOM_X_RU": 0, "ROOM_Y_RU": 0, "ROOM_SCALE_X": 1, "ROOM_SCALE_Y": 1, "STAGE_NO": 0, "ROOM_NAME": "gym_small", "LAYERS_LIST": [[{"name": "Solid", "type": "Solid", "xds": 0, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 16, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 32, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 48, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 64, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 80, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 96, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 112, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 128, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 144, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 160, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 176, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 192, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 208, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 224, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 240, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 256, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 272, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 288, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 304, "yds": 0, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 0, "yds": 16, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 16, "yds": 16, "layer_i": 0, "region": [0, 0, 16, 16]}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {"name": "Solid", "type": "Solid", "xds": 304, "yds": 16, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 0, "yds": 32, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 16, "yds": 32, "layer_i": 0, "region": [0, 0, 16, 16]}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {"name": "Solid", "type": "Solid", "xds": 304, "yds": 32, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 0, "yds": 48, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 16, "yds": 48, "layer_i": 0, "region": [0, 0, 16, 16]}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {"name": "Solid", "type": "Solid", "xds": 304, "yds": 48, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 0, "yds": 64, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 16, "yds": 64, "layer_i": 0, "region": [0, 0, 16, 16]}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {"name": "Solid", "type": "Solid", "xds": 304, "yds": 64, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 0, "yds": 80, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 16, "yds": 80, "layer_i": 0, "region": [0, 0, 16, 16]}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {"name": "Solid", "type": "Solid", "xds": 304, "yds": 80, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "LeftDoor", "type": "Door", "xds": 0, "yds": 96, "layer_i": 0, "region": [32, 0, 16, 16], "target": {"STAGE_NO": 0, "target": "gym_wide"}}, 0, 0, 0, 0, 0, 0, 0, {"name": "Thin", "type": "Thin", "xds": 128, "yds": 96, "layer_i": 0, "region": [16, 0, 16, 16]}, {"name": "Thin", "type": "Thin", "xds": 144, "yds": 96, "layer_i": 0, "region": [16, 0, 16, 16]}, {"name": "Thin", "type": "Thin", "xds": 160, "yds": 96, "layer_i": 0, "region": [16, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 176, "yds": 96, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 192, "yds": 96, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 208, "yds": 96, "layer_i": 0, "region": [0, 0, 16, 16]}, 0, 0, 0, 0, 0, {"name": "Solid", "type": "Solid", "xds": 304, "yds": 96, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "LeftDoor", "type": "Door", "xds": 0, "yds": 112, "layer_i": 0, "region": [32, 0, 16, 16], "target": {"STAGE_NO": 0, "target": "gym_wide"}}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {"name": "Solid", "type": "Solid", "xds": 304, "yds": 112, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "LeftDoor", "type": "Door", "xds": 0, "yds": 128, "layer_i": 0, "region": [32, 0, 16, 16], "target": {"STAGE_NO": 0, "target": "gym_wide"}}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {"name": "Solid", "type": "Solid", "xds": 304, "yds": 128, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 0, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 16, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 32, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 48, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 64, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 80, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 96, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 112, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 128, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 144, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 160, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 176, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 192, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 208, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 224, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 240, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 256, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 272, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 288, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 304, "yds": 144, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 0, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 16, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 32, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 48, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 64, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 80, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 96, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 112, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 128, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 144, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 160, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 176, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 192, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 208, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 224, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 240, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 256, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 272, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 288, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}, {"name": "Solid", "type": "Solid", "xds": 304, "yds": 160, "layer_i": 0, "region": [0, 0, 16, 16]}]]}
+{
+  "RESOLUTION": 4,
+  "ROOM_X_RU": 0,
+  "ROOM_Y_RU": 0,
+  "ROOM_SCALE_X": 1,
+  "ROOM_SCALE_Y": 1,
+  "STAGE_NO": 0,
+  "ROOM_NAME": "gym_small",
+  "LAYERS_LIST": [
+    [
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 0,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 16,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 32,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 48,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 64,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 80,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 96,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 112,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 128,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 144,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 160,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 176,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 192,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 208,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 224,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 240,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 256,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 272,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 288,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 304,
+        "yds": 0,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 0,
+        "yds": 16,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 16,
+        "yds": 16,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 304,
+        "yds": 16,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 0,
+        "yds": 32,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 16,
+        "yds": 32,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 304,
+        "yds": 32,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 0,
+        "yds": 48,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 16,
+        "yds": 48,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 304,
+        "yds": 48,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 0,
+        "yds": 64,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 16,
+        "yds": 64,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 304,
+        "yds": 64,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 0,
+        "yds": 80,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 16,
+        "yds": 80,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 304,
+        "yds": 80,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "LeftDoor",
+        "type": "Door",
+        "xds": 0,
+        "yds": 96,
+        "layer_i": 0,
+        "region": [32, 0, 16, 16],
+        "data": { "STAGE_NO": 0, "target": "gym_wide" }
+      },
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      {
+        "name": "Thin",
+        "type": "Thin",
+        "xds": 128,
+        "yds": 96,
+        "layer_i": 0,
+        "region": [16, 0, 16, 16]
+      },
+      {
+        "name": "Thin",
+        "type": "Thin",
+        "xds": 144,
+        "yds": 96,
+        "layer_i": 0,
+        "region": [16, 0, 16, 16]
+      },
+      {
+        "name": "Thin",
+        "type": "Thin",
+        "xds": 160,
+        "yds": 96,
+        "layer_i": 0,
+        "region": [16, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 176,
+        "yds": 96,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 192,
+        "yds": 96,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 208,
+        "yds": 96,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      0,
+      0,
+      0,
+      0,
+      0,
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 304,
+        "yds": 96,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "LeftDoor",
+        "type": "Door",
+        "xds": 0,
+        "yds": 112,
+        "layer_i": 0,
+        "region": [32, 0, 16, 16],
+        "data": { "STAGE_NO": 0, "target": "gym_wide" }
+      },
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 304,
+        "yds": 112,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "LeftDoor",
+        "type": "Door",
+        "xds": 0,
+        "yds": 128,
+        "layer_i": 0,
+        "region": [32, 0, 16, 16],
+        "data": { "STAGE_NO": 0, "target": "gym_wide" }
+      },
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 304,
+        "yds": 128,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 0,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 16,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 32,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 48,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 64,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 80,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 96,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 112,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 128,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 144,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 160,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 176,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 192,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 208,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 224,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 240,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 256,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 272,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 288,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 304,
+        "yds": 144,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 0,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 16,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 32,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 48,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 64,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 80,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 96,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 112,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 128,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 144,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 160,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 176,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 192,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 208,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 224,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 240,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 256,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 272,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 288,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      },
+      {
+        "name": "Solid",
+        "type": "Solid",
+        "xds": 304,
+        "yds": 160,
+        "layer_i": 0,
+        "region": [0, 0, 16, 16]
+      }
+    ]
+  ]
+}
