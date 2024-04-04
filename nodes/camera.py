@@ -16,13 +16,16 @@ class Camera:
 
     def __init__(self):
         self.rect = pg.FRect(0, 0, NATIVE_W, NATIVE_H)
-        self.lerp_weight = 0.1
+        self.lerp_weight = 0.009
         self.target = [0, 0]
         self.target_x = 0
         self.target_y = 0
 
     def set_target(self, value):
         self.target = value
+
+    def set_lerp_weight(self, value):
+        self.lerp_weight = value
 
     def update(self, dt):
         # Room not ready? Return
@@ -49,7 +52,7 @@ class Camera:
         self.rect.x = pg.math.lerp(
             self.rect.x,
             self.target_x - (NATIVE_W // 2),
-            self.lerp_weight
+            self.lerp_weight * dt
         )
         if abs(self.rect.x) < 0.001:
             self.rect.x = 0
@@ -58,7 +61,7 @@ class Camera:
         self.rect.y = pg.math.lerp(
             self.rect.y,
             self.target_y - (NATIVE_H // 2),
-            self.lerp_weight
+            self.lerp_weight * dt
         )
         if abs(self.rect.y) < 0.001:
             self.rect.y = 0

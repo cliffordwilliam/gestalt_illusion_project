@@ -393,7 +393,7 @@ class Player:
         # endregion Update velocity with gravity
 
         # region Update x velocity with direction
-        self.velocity.x = pg.math.smoothstep(
+        self.velocity.x = pg.math.lerp(
             self.velocity.x,
             self.direction * self.max_run,
             self.run_lerp_weight

@@ -18,6 +18,9 @@ class World:
         a.player.rect.x = 32
 
         a.camera.set_target(a.player.camera_anchor)
+        # 0.09 (player speed) * dt (distance) * 0.2 (lerp) -> 0.288 (distance / frame)
+        # camera have to cover 32px, so 32 (distance) * 0.009 (lerp) = 0.288 (distance / frame)
+        a.camera.set_lerp_weight(0.009)
 
         # Curtain belongs to world, it needs to distinguish the callback
         self.transition_curtain = Curtain(50, "empty")

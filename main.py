@@ -9,7 +9,7 @@ class Game:
         self.is_debug = False
 
         # Resolution and window
-        self.resolution = 4
+        self.resolution = 6
         self.window_w = WINDOW_W * self.resolution
         self.window_h = WINDOW_H * self.resolution
         self.window_surf = pg.display.set_mode((self.window_w, self.window_h))
