@@ -231,7 +231,7 @@ class Kinematic:
                 self.is_on_wall = False
                 displacement_x -= 1
                 self.owner.rect.x += direction_x
-                self.owner.rect.clamp_ip(a.camera.rect)
+                # self.owner.rect.clamp_ip(a.camera.rect)
         # endregion Update horizontal position
 
         # region Update vertical position
@@ -391,7 +391,7 @@ class Kinematic:
                 self.is_on_floor = False
                 displacement_y -= 1
                 self.owner.rect.y += direction_y
-                self.owner.rect.clamp_ip(a.camera.rect)
+                # self.owner.rect.clamp_ip(a.camera.rect)
         # endregion Update vertical position
 
         # region Handle walk against wall

@@ -1,0 +1,46 @@
+{
+  "idle": {
+    "is_loop": 1,
+    "next_animation": 0,
+    "frames_list": [
+      {
+        "region": [0, 0, 80, 80],
+        "duration": 100
+      },
+      {
+        "region": [80, 0, 80, 80],
+        "duration": 100
+      },
+      {
+        "region": [160, 0, 80, 80],
+        "duration": 100
+      },
+      {
+        "region": [240, 0, 80, 80],
+        "duration": 100
+      }
+    ]
+  },
+  "run": {
+    "is_loop": 1,
+    "next_animation": 0,
+    "frames_list": [
+      {
+        "region": [0, 80, 80, 80],
+        "duration": 100
+      },
+      {
+        "region": [80, 80, 80, 80],
+        "duration": 100
+      },
+      {
+        "region": [160, 80, 80, 80],
+        "duration": 100
+      },
+      {
+        "region": [80, 80, 80, 80],
+        "duration": 100
+      }
+    ]
+  }
+}

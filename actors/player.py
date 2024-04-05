@@ -75,10 +75,8 @@ class Player:
         self.normal_gravity = 0.000533
         self.heavy_gravity = 0.001066
         self.gravity = self.normal_gravity
-        self.jump_vel = -0.2325
+        self.jump_vel = -0.2330
         self.velocity = pg.math.Vector2()
-        self.remainder_x = 0
-        self.remainder_y = 0
 
         # Kinematic
         self.kinematic = Kinematic(self)

@@ -1,6 +1,7 @@
 from constants import *
 from scenes.world import World
 import autoload as a
+from actors.goblin import Goblin
 
 
 class Game:
@@ -26,14 +27,14 @@ class Game:
             "jump": pg.K_c,
         }
 
+        # All actors
+        self.actors = {
+            "Goblin": Goblin
+        }
+
         # All scenes
         self.scenes = {
             "World": World
-        }
-        self.current_scene = self.scenes["World"]()
-
-        # All actors
-        self.actors = {
         }
 
     def set_resolution(self, value):
@@ -62,6 +63,7 @@ class Game:
 
 # Instance a.game
 a.game = Game()
+a.game.current_scene = a.game.scenes["World"]()
 
 # Main loop
 while 1:

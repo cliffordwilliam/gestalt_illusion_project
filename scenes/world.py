@@ -3,6 +3,7 @@ import autoload as a
 from nodes.camera import Camera
 from nodes.room import Room
 from actors.player import Player
+from actors.goblin import Goblin
 from nodes.curtain import Curtain
 
 
@@ -16,10 +17,12 @@ class World:
 
         a.player = Player()
         a.player.rect.x = 32
+        a.player.rect.bottom = 144
 
         a.camera.set_target(a.player.camera_anchor)
         # 0.09 (player speed) * dt (distance) * 0.2 (lerp) -> 0.288 (distance / frame)
         # camera have to cover 32px, so 32 (distance) * 0.009 (lerp) = 0.288 (distance / frame)
+        # TODO: Each enemy will check their distance to player, if they are at certain close distance then only will they aabb
         a.camera.set_lerp_weight(0.009)
 
         # Curtain belongs to world, it needs to distinguish the callback

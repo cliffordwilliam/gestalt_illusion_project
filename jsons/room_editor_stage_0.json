@@ -54,6 +54,14 @@
       "yds": 0,
       "layer_i": 0,
       "region": [80, 0, 16, 16]
+    },
+    {
+      "name": "Goblin",
+      "type": "Actor",
+      "xds": 0,
+      "yds": 0,
+      "layer_i": 0,
+      "region": [96, 0, 16, 16]
     }
   ]
 }

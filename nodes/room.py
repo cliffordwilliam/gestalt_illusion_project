@@ -18,10 +18,7 @@ class Room:
         1: You need to call my bg layer draw, This func, for every frame draws the bg
         2: Same goes with fg, fg includes the collision layer first, then the fg
         3: I have update func to update all actors in my bg layers
-
-    TODO: Add an actor layer, where enemies, or wahtever that is moving around like the player has to be placed into -> then use quad tree for collision check. place quadtree as big as room size
-    TODO: Start with a bouncing ball in a room, that goes in linear speed, if it collide with solid static tiles, bounce, use lookup map for that. Then if it hits moving placer, bounce too, use quad tree for that
-    TODO: What if it is inside the collision layer? Then have it update its position in the lookup table, like a moving floor - NVM, if 2 actors of small hitbox are in same tile, they wont detect each other
+        4: Collision layers may have actors, these will be moved to the draw update collision layer. Where stuffs are drawn and updated
     '''
 
     def __init__(self, name):
@@ -36,7 +33,8 @@ class Room:
         # Room layers
         self.bg_layers = self.room_data["BG_LAYERS"]
         self.collision_layer = self.room_data["COLLISION_LAYER"]
-        self.collision_draw_layer = [x for x in self.collision_layer if x != 0]
+        self.collision_draw_update_layer = [
+            x for x in self.collision_layer if x != 0]
         self.fg_layers = self.room_data["FG_LAYERS"]
 
         # Room rect, room camera limit
@@ -64,13 +62,29 @@ class Room:
             for j in range(len(room)):
                 sprite = room[j]
                 if sprite != 0:
-                    name = sprite["name"]
+                    sprite_name = sprite["name"]
                     x = sprite["xds"]
                     y = sprite["yds"]
-                    if name in a.game.actors:
-                        actor = a.game.actors[name](
-                            self.sprite_sheet_surf, x, y)
+                    if sprite_name in a.game.actors:
+                        actor = a.game.actors[sprite_name]()
+                        actor.rect.x = x
+                        actor.rect.y = y
+                        actor.rect.y -= actor.rect.height - TILE_S
                         self.bg_layers[i][j] = {"name": "actor", "obj": actor}
+
+        # Check if there are any actors in collision layer
+        for i in range(len(self.collision_draw_update_layer)):
+            sprite = self.collision_draw_update_layer[i]
+            sprite_name = sprite["name"]
+            x = sprite["xds"]
+            y = sprite["yds"]
+            if sprite_name in a.game.actors:
+                actor = a.game.actors[sprite_name]()
+                actor.rect.x = x
+                actor.rect.y = y
+                actor.rect.y -= actor.rect.height - TILE_S
+                self.collision_draw_update_layer[i] = {
+                    "name": "actor", "obj": actor}
 
     def set_name(self, name):
         # Get new room name
@@ -84,7 +98,8 @@ class Room:
         # Room layers
         self.bg_layers = self.room_data["BG_LAYERS"]
         self.collision_layer = self.room_data["COLLISION_LAYER"]
-        self.collision_draw_layer = [x for x in self.collision_layer if x != 0]
+        self.collision_draw_update_layer = [
+            x for x in self.collision_layer if x != 0]
         self.fg_layers = self.room_data["FG_LAYERS"]
 
         # Room rect, room camera limit
@@ -118,9 +133,25 @@ class Room:
                     y = sprite["yds"]
                     # Instance actor and place it in bg layer
                     if sprite_name in a.game.actors:
-                        actor = a.game.actors[sprite_name](
-                            self.sprite_sheet_surf, x, y)
+                        actor = a.game.actors[sprite_name]()
+                        actor.rect.x = x
+                        actor.rect.y = y
+                        actor.rect.y -= actor.rect.height
                         self.bg_layers[i][j] = {"name": "actor", "obj": actor}
+
+        # Check if there are any actors in collision layer
+        for i in range(len(self.collision_draw_update_layer)):
+            sprite = self.collision_draw_update_layer[i]
+            sprite_name = sprite["name"]
+            x = sprite["xds"]
+            y = sprite["yds"]
+            if sprite_name in a.game.actors:
+                actor = a.game.actors[sprite_name]()
+                actor.rect.x = x
+                actor.rect.y = y
+                actor.rect.y -= actor.rect.height - TILE_S
+                self.collision_draw_update_layer[i] = {
+                    "name": "actor", "obj": actor}
 
     def draw_bg(self):
         # Camera not ready? return
@@ -172,15 +203,30 @@ class Room:
         # region Draw all bg sprites
         for room in self.bg_layers:
             for item in room:
+                # Found actor? Call their draw
+                if item["name"] == "actor":
+                    sprite = item["obj"]
+                    if (a.camera.rect.x - sprite.rect.width <= sprite.rect.x < a.camera.rect.right) and (a.camera.rect.y - sprite.rect.height <= sprite.rect.y < a.camera.rect.bottom):
+                        sprite.draw()
+                        continue
+
                 # Only draw sprites that are in view
                 if (a.camera.rect.x - item["region"][2] <= item["xds"] < a.camera.rect.right) and (a.camera.rect.y - item["region"][3] <= item["yds"] < a.camera.rect.bottom):
-                    if item["name"] == "actor":
-                        item["obj"].draw()
-                        continue
+                    # Not actor? Draw normal
                     xd = item["xds"] - a.camera.rect.x
                     yd = item["yds"] - a.camera.rect.y
                     NATIVE_SURF.blit(self.sprite_sheet_surf,
                                      (xd, yd), item["region"])
+
+        # region Draw all collision actor sprites
+        for item in self.collision_draw_update_layer:
+            # Found actor? Call their draw
+            if item["name"] == "actor":
+                sprite = item["obj"]
+                if (a.camera.rect.x - sprite.rect.width <= sprite.rect.x < a.camera.rect.right) and (a.camera.rect.y - sprite.rect.height <= sprite.rect.y < a.camera.rect.bottom):
+                    sprite.draw()
+                    continue
+        # endregion Draw all collision actor sprites
         # endregion Draw all bg sprites
 
     def draw_fg(self):
@@ -189,13 +235,15 @@ class Room:
             return
 
         # region Draw all collision sprites
-        for item in self.collision_draw_layer:
-            # Only draw sprites that are in view
-            if (a.camera.rect.x - item["region"][2] <= item["xds"] < a.camera.rect.right) and (a.camera.rect.y - item["region"][3] <= item["yds"] < a.camera.rect.bottom):
-                xd = item["xds"] - a.camera.rect.x
-                yd = item["yds"] - a.camera.rect.y
-                NATIVE_SURF.blit(self.sprite_sheet_surf,
-                                 (xd, yd), item["region"])
+        for item in self.collision_draw_update_layer:
+            if item["name"] != "actor":
+                # Only draw sprites that are in view
+                if (a.camera.rect.x - item["region"][2] <= item["xds"] < a.camera.rect.right) and (a.camera.rect.y - item["region"][3] <= item["yds"] < a.camera.rect.bottom):
+                    # Not actor? Draw normal
+                    xd = item["xds"] - a.camera.rect.x
+                    yd = item["yds"] - a.camera.rect.y
+                    NATIVE_SURF.blit(self.sprite_sheet_surf,
+                                     (xd, yd), item["region"])
         # endregion Draw all collision sprites
 
         # region Draw all fg sprites
@@ -214,11 +262,21 @@ class Room:
         if a.camera == None:
             return
 
-        # region Draw all bg sprites
+        # region Update all bg sprites
         for room in self.bg_layers:
             for item in room:
-                # Only draw sprites that are in view
-                if (a.camera.rect.x - item["region"][2] <= item["xds"] < a.camera.rect.right) and (a.camera.rect.y - item["region"][3] <= item["yds"] < a.camera.rect.bottom):
-                    if item["name"] == "actor":
-                        item["obj"].update(dt)
-        # endregion Draw all bg sprites
+                if item["name"] == "actor":
+                    sprite = item["obj"]
+                    if (a.camera.rect.x - sprite.rect.width <= sprite.rect.x < a.camera.rect.right) and (a.camera.rect.y - sprite.rect.height <= sprite.rect.y < a.camera.rect.bottom):
+                        sprite.update(dt)
+                        continue
+        # endregion Update all bg sprites
+
+        # region Update all collision actors
+        for item in self.collision_draw_update_layer:
+            if item["name"] == "actor":
+                sprite = item["obj"]
+                if (a.camera.rect.x - sprite.rect.width <= sprite.rect.x < a.camera.rect.right) and (a.camera.rect.y - sprite.rect.height <= sprite.rect.y < a.camera.rect.bottom):
+                    sprite.update(dt)
+                    continue
+        # endregion Update all collision actors

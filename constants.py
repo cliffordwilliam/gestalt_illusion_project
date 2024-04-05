@@ -11,7 +11,9 @@ PNGS_PATHS = {
     "player_sprite_sheet.png": join(PNGS_DIR_PATH, "player_sprite_sheet.png"),
     "player_flip_sprite_sheet.png": join(PNGS_DIR_PATH, "player_flip_sprite_sheet.png"),
     "stage_1_sprite_sheet.png": join(PNGS_DIR_PATH, "stage_1_sprite_sheet.png"),
-    "stage_0_sprite_sheet.png": join(PNGS_DIR_PATH, "stage_0_sprite_sheet.png")
+    "stage_0_sprite_sheet.png": join(PNGS_DIR_PATH, "stage_0_sprite_sheet.png"),
+    "goblin_sprite_sheet.png": join(PNGS_DIR_PATH, "goblin_sprite_sheet.png"),
+    "goblin_flip_sprite_sheet.png": join(PNGS_DIR_PATH, "goblin_flip_sprite_sheet.png"),
 }
 
 # Ttfs
@@ -35,6 +37,7 @@ JSONS_PATHS = {
     "stage0_gym_wide_game.json": join(JSONS_DIR_PATH, "stage0_gym_wide_game.json"),
     "stage0_gym_tall_editor.json": join(JSONS_DIR_PATH, "stage0_gym_tall_editor.json"),
     "stage0_gym_tall_game.json": join(JSONS_DIR_PATH, "stage0_gym_tall_game.json"),
+    "goblin_animation.json": join(JSONS_DIR_PATH, "goblin_animation.json"),
 }
 
 # Constants
