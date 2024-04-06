@@ -90,6 +90,7 @@ V_BITMASK_TYPE_SPRITE_NAMES = stage_data["V_BITMASK_TYPE_SPRITE_NAMES"]
 H_BITMASK_TYPE_SPRITE_NAMES = stage_data["H_BITMASK_TYPE_SPRITE_NAMES"]
 MIX_BITMASK_TYPE_SPRITE_NAMES = stage_data["MIX_BITMASK_TYPE_SPRITE_NAMES"]
 COLLISION_LAYER_I = stage_data["COLIISION_LAYER_I"]
+ACTOR_LAYER_I = stage_data["ACTOR_LAYER_I"]
 SPRITES = stage_data["SPRITES"]
 SPRITES_LEN = len(SPRITES)
 # endregion Room editor settings
@@ -139,14 +140,10 @@ ROOM_RECT = pg.Rect(ROOM_X_TU * TILE_S, ROOM_Y_TU * TILE_S,
 CAM_RECT.topleft = ROOM_RECT.topleft
 
 # Setup the layers of rooms from loaded or empty
-selected_layers_lsit = layers_list
 if IS_LOAD == "y":
-    selected_layers_lsit = layers_list
+    LAYERS_LIST = layers_list
 elif IS_LOAD == "n":
-    selected_layers_lsit = [[0] * (ROOM_W_TU * ROOM_H_TU)
-                            for _ in range(TOTAL_LAYERS)]
-
-LAYERS_LIST = selected_layers_lsit
+    LAYERS_LIST = [[0] * (ROOM_W_TU * ROOM_H_TU) for _ in range(TOTAL_LAYERS)]
 
 # For highlight effects
 LIGHT_SURF = pg.Surface((NATIVE_W, NATIVE_H))
@@ -456,11 +453,9 @@ while 1:
         yd_tu = yd // TILE_S
         xds = xd_tu * TILE_S
         yds = yd_tu * TILE_S
-
         # Remove room offset to be collision index
         x_tu = xd_tu - ROOM_X_TU
         y_tu = yd_tu - ROOM_Y_TU
-        
         # Cursor position global pos
         xs = xds - CAM_RECT.x
         ys = yds - CAM_RECT.y
@@ -639,41 +634,54 @@ while 1:
                     "ROOM_SCALE_Y": ROOM_SCALE_Y,
                     "STAGE_NO": STAGE_NO,
                     "ROOM_NAME": ROOM_NAME,
-                    "LAYERS_LIST": LAYERS_LIST,
+                    "LAYERS_LIST": LAYERS_LIST
                 }
                 with open(SAVE_PATH_LOAD, "w") as json_file:
                     dump(ROOM_TO_BE_SAVED_DATA_LOAD, json_file)
                 # Room ready
                 TO_BE_SAVED_BG_LAYERS = []
                 TO_BE_SAVED_COLLISION_LAYER = []
+                TO_BE_SAVED_ACTOR_LAYER = []
                 TO_BE_SAVED_FG_LAYERS = []
                 for i in range(TOTAL_LAYERS):
+                    # Handle each room in all layers
                     room = LAYERS_LIST[i]
-                    # Remove zeroes from non collision layers
+
+                    # Remove zeroes from non collision layers (only collision needs zeroes)
                     if i != COLLISION_LAYER_I:
                         room = [x for x in room if x != 0]
-                    # Remove layer_i and regions from sprites, these are not needed for drawing in game
+
+                    # Remove layer_i and regions from sprites prop, these are not needed for drawing in game
                     for sprite in room:
                         if sprite != 0:
                             sprite.pop("layer_i")
                             # Not all sprites has regions
                             if "regions" in sprite:
                                 sprite.pop("regions")
-                    # Collect non empty rooms
+
+                    # Handle non empty rooms
                     if room:
+                        # Reformat regions to be list to be json saved
                         for cell in room:
                             if cell != 0:
                                 region = cell["region"]
                                 cell["region"] = [region[0],
                                                   region[1], region[2], region[3]]
-                        if i < COLLISION_LAYER_I:
-                            TO_BE_SAVED_BG_LAYERS.append(room)
-                        elif i == COLLISION_LAYER_I:
-                            TO_BE_SAVED_COLLISION_LAYER = room
-                        elif i > COLLISION_LAYER_I:
-                            TO_BE_SAVED_FG_LAYERS.append(room)
+
+                        # Fill in layers to be saved
+                        if i == ACTOR_LAYER_I:
+                            TO_BE_SAVED_ACTOR_LAYER = room
+                        else:
+                            if i < COLLISION_LAYER_I:
+                                TO_BE_SAVED_BG_LAYERS.append(room)
+                            elif i == COLLISION_LAYER_I:
+                                TO_BE_SAVED_COLLISION_LAYER = room
+                            elif i > COLLISION_LAYER_I:
+                                TO_BE_SAVED_FG_LAYERS.append(room)
+
                 # Save data to be used in game
                 ROOM_TO_BE_SAVED_DATA = {
+                    "ACTOR_LAYER": TO_BE_SAVED_ACTOR_LAYER,
                     "BG_LAYERS": TO_BE_SAVED_BG_LAYERS,
                     "COLLISION_LAYER": TO_BE_SAVED_COLLISION_LAYER,
                     "FG_LAYERS": TO_BE_SAVED_FG_LAYERS,

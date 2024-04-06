@@ -1,18 +1,19 @@
 {
   "SPRITE_SHEET_PNG_NAME": "stage_0_sprite_sheet.png",
-  "TOTAL_LAYERS": 1,
+  "TOTAL_LAYERS": 2,
   "BITMASK_TYPE_SPRITE_NAMES": [],
   "V_BITMASK_TYPE_SPRITE_NAMES": [],
   "H_BITMASK_TYPE_SPRITE_NAMES": [],
   "MIX_BITMASK_TYPE_SPRITE_NAMES": [],
-  "COLIISION_LAYER_I": 0,
+  "COLIISION_LAYER_I": 1,
+  "ACTOR_LAYER_I": 0,
   "SPRITES": [
     {
       "name": "Solid",
       "type": "Solid",
       "xds": 0,
       "yds": 0,
-      "layer_i": 0,
+      "layer_i": 1,
       "region": [0, 0, 16, 16]
     },
     {
@@ -20,7 +21,7 @@
       "type": "Thin",
       "xds": 0,
       "yds": 0,
-      "layer_i": 0,
+      "layer_i":1,
       "region": [16, 0, 16, 16]
     },
     {
@@ -28,7 +29,7 @@
       "type": "Door",
       "xds": 0,
       "yds": 0,
-      "layer_i": 0,
+      "layer_i": 1,
       "region": [32, 0, 16, 16]
     },
     {
@@ -36,7 +37,7 @@
       "type": "Door",
       "xds": 0,
       "yds": 0,
-      "layer_i": 0,
+      "layer_i": 1,
       "region": [48, 0, 16, 16]
     },
     {
@@ -44,7 +45,7 @@
       "type": "Door",
       "xds": 0,
       "yds": 0,
-      "layer_i": 0,
+      "layer_i": 1,
       "region": [64, 0, 16, 16]
     },
     {
@@ -52,7 +53,7 @@
       "type": "Door",
       "xds": 0,
       "yds": 0,
-      "layer_i": 0,
+      "layer_i": 1,
       "region": [80, 0, 16, 16]
     },
     {
