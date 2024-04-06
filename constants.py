@@ -37,6 +37,8 @@ JSONS_PATHS = {
     "stage0_gym_wide_game.json": join(JSONS_DIR_PATH, "stage0_gym_wide_game.json"),
     "stage0_gym_tall_editor.json": join(JSONS_DIR_PATH, "stage0_gym_tall_editor.json"),
     "stage0_gym_tall_game.json": join(JSONS_DIR_PATH, "stage0_gym_tall_game.json"),
+    "stage0_gym_big_editor.json": join(JSONS_DIR_PATH, "stage0_gym_big_editor.json"),
+    "stage0_gym_big_game.json": join(JSONS_DIR_PATH, "stage0_gym_big_game.json"),
     "goblin_animation.json": join(JSONS_DIR_PATH, "goblin_animation.json"),
 }
 

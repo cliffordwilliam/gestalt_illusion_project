@@ -52,10 +52,14 @@ class Camera:
         bottom -= NATIVE_H // 2
         self.target_y = max(min(self.target_y, bottom), top)
 
+        # Lerp targets
+        target_x = self.target_x - (NATIVE_W // 2)
+        target_y = self.target_y - (NATIVE_H // 2)
+
         # Update horizontal position
         self.rect.x = pg.math.lerp(
             self.rect.x,
-            self.target_x - (NATIVE_W // 2),
+            target_x,
             self.lerp_weight * dt
         )
         if abs(self.rect.x) < 0.001:
@@ -64,14 +68,31 @@ class Camera:
         # Update vertical position
         self.rect.y = pg.math.lerp(
             self.rect.y,
-            self.target_y - (NATIVE_H // 2),
+            target_y,
             self.lerp_weight * dt
         )
         if abs(self.rect.y) < 0.001:
             self.rect.y = 0
 
-        # Debug draw target
+        # Snap to room left if too close
+        diff = abs(self.rect.x - target_x)
+        if diff < 0.1:
+            self.rect.x = target_x
+
+        # Snap to room top if too close
+        diff = abs(self.rect.y - target_y)
+        if diff < 0.1:
+            self.rect.y = target_y
+
+        # Debug draw
         if a.game.is_debug:
+            # Draw my center
+            x = (NATIVE_W // 2) - 1
+            y = (NATIVE_H // 2) - 1
+            pg.draw.line(DEBUG_SURF, "red4", (x, 0), (x, NATIVE_H), 2)
+            pg.draw.line(DEBUG_SURF, "red4", (0, y), (NATIVE_W, y), 2)
+
+            # Draw target
             x = self.target_x - self.rect.x
             y = self.target_y - self.rect.y
             pg.draw.circle(DEBUG_SURF, "yellow", (x, y), 2)
