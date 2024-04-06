@@ -367,9 +367,9 @@ class Player:
             # endregion Exit to up
 
         # region Update my camera anchor to follow me
-        self.camera_anchor[0] = self.rect.x + \
+        self.camera_anchor[0] = self.rect.center[0] + \
             (self.facing_direction * (2 * TILE_S))
-        self.camera_anchor[1] = self.rect.y
+        self.camera_anchor[1] = self.rect.center[1]
         # endregion Update my camera anchor to follow me
 
         # Reset if before this update call the event toggle this to true, event is called first
