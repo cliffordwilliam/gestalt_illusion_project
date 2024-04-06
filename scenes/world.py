@@ -20,9 +20,6 @@ class World:
         a.player.rect.bottom = 144
 
         a.camera.set_target(a.player.camera_anchor)
-        # 0.09 (player speed) * dt (distance) * 0.2 (lerp) -> 0.288 (distance / frame)
-        # camera have to cover 32px, so 32 (distance) * 0.009 (lerp) = 0.288 (distance / frame)
-        # TODO: Each enemy will check their distance to player, if they are at certain close distance then only will they aabb
         a.camera.set_lerp_weight(0.009)
 
         # Curtain belongs to world, it needs to distinguish the callback
@@ -49,19 +46,14 @@ class World:
         self.state = "Playing"
 
         # Reset transition curtain
-        self.transition_curtain.curtain.set_alpha(0)
-        self.transition_curtain.alpha = 0
-        self.transition_curtain.fade_duration = self.transition_curtain.fade_duration
-        self.transition_curtain.fade_timer = 0
-        self.transition_curtain.direction = 1
-        self.transition_curtain.remainder = 0
+        self.transition_curtain.reset()
 
     def on_transition_curtain_full_end(self):
         # Change room
         self.change_room()
 
         # Reverse transition curtain direction
-        self.transition_curtain.direction *= -1
+        self.transition_curtain.flip_direction()
 
     def change_room(self):
         # region Replace this room with new room
@@ -70,9 +62,11 @@ class World:
         # Unpack door data
         stage_no = door_data["STAGE_NO"]
         target = door_data["target"]
+
+        # Change to new room
         a.room.set_name(f"stage{stage_no}_{target}_game.json")
 
-        # region Move player and camera to new room position
+        # region Adjust player and camera to new room position
         door_name = self.next_door["name"]
         if door_name == "LeftDoor":
             a.player.rect.right = (
@@ -91,7 +85,7 @@ class World:
         elif door_name == "DownDoor":
             a.player.rect.top = a.room.rect[1] + TILE_S
             a.camera.rect.y += NATIVE_H
-        # endregion Move player and camera to new room
+        # endregion Adjust player and camera to new room position
 
     def event(self, event):
         # Player event

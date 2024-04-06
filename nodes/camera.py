@@ -12,6 +12,10 @@ class Camera:
         2: On every frame, clamp target to be a value where the cam will not overshoot limit
         3: Update camera position to lerp to target position
         4: Has a debug draw to show target position with draw offset in update method
+
+    Notes:
+        - 0.09 (player speed) * dt (distance) * 0.2 (lerp) -> 0.288 (distance / frame)
+        - camera have to cover 32px, so 32 (distance) * 0.009 (lerp) = 0.288 (distance / frame)
     '''
 
     def __init__(self):

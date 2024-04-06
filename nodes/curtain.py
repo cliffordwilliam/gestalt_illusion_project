@@ -45,6 +45,25 @@ class Curtain:
         self.listener_empty_ends = []
         self.listener_full_ends = []
 
+    def flip_direction(self):
+        self.direction *= -1
+
+    def reset(self):
+        # Start empty
+        self.curtain.set_alpha(0)
+        self.alpha = 0
+        self.fade_timer = 0
+        self.direction = 1
+        self.remainder = 0
+
+        # Start full
+        if self.start == "full":
+            self.curtain.set_alpha(255)
+            self.alpha = 255
+            self.fade_timer = self.fade_duration
+            self.direction = -1
+            self.remainder = 0
+
     def add_event_listener(self, value, event):
         if event == "empty_end":
             self.listener_empty_ends.append(value)

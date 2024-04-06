@@ -35,7 +35,7 @@ class Goblin:
         # State
         self.state = "idle"
 
-        # Direction input
+        # Direction input, updated by timer and wall / when not on floor
         self.direction = 0
 
         # Animator node
@@ -139,33 +139,44 @@ class Goblin:
         if self.state == "idle":
             self.idle_timer.update(dt)
 
+            # Exits are taken care of timers
+
+            # In state logic
+
         # Run
         elif self.state == "run":
             self.run_timer.update(dt)
 
-            # region Bounce off wall
+            # Exits are taken care of timers
+
+            # In state logic
+            # region Pressing against wall?
             if self.kinematic.is_on_wall:
-                # Flip
+                # Flip direction
                 self.direction *= -1
+
+                # Update sprite to follow direction
                 if self.direction == 1:
                     self.current_sprite_sheet = self.sprite_sheet
                 elif self.direction == -1:
                     self.current_sprite_sheet = self.sprite_sheet_flip
-            # endregion Bounce off wall
+            # endregion Pressing against wall?
 
-            # region Not walk off cliffs
+            # region Walked off cliff?
             if not self.kinematic.is_on_floor:
                 # Flip
                 self.direction *= -1
+
+                # Update sprite to follow direction
                 if self.direction == 1:
                     self.current_sprite_sheet = self.sprite_sheet
                 elif self.direction == -1:
                     self.current_sprite_sheet = self.sprite_sheet_flip
 
-                # Go back in time, prev frame pos
+                # Go back in time, set current pos to prev frame pos
                 self.rect.x = old_position_x
                 self.rect.y = old_position_y
-            # endregion Not walk off cliffs
+            # endregion Walked off cliff?
 
     # Set state
     def set_state(self, value):
@@ -177,6 +188,7 @@ class Goblin:
             # To run
             if self.state == "run":
                 # region Set direction input based on sprite sheet right now
+                # Use current sprite sheet to determine direction
                 if self.current_sprite_sheet == self.sprite_sheet:
                     self.direction = 1
                 elif self.current_sprite_sheet == self.sprite_sheet_flip:

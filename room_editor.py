@@ -139,10 +139,14 @@ ROOM_RECT = pg.Rect(ROOM_X_TU * TILE_S, ROOM_Y_TU * TILE_S,
 CAM_RECT.topleft = ROOM_RECT.topleft
 
 # Setup the layers of rooms from loaded or empty
+selected_layers_lsit = layers_list
 if IS_LOAD == "y":
-    LAYERS_LIST = layers_list
+    selected_layers_lsit = layers_list
 elif IS_LOAD == "n":
-    LAYERS_LIST = [[0] * (ROOM_W_TU * ROOM_H_TU) for _ in range(TOTAL_LAYERS)]
+    selected_layers_lsit = [[0] * (ROOM_W_TU * ROOM_H_TU)
+                            for _ in range(TOTAL_LAYERS)]
+
+LAYERS_LIST = selected_layers_lsit
 
 # For highlight effects
 LIGHT_SURF = pg.Surface((NATIVE_W, NATIVE_H))
@@ -452,9 +456,11 @@ while 1:
         yd_tu = yd // TILE_S
         xds = xd_tu * TILE_S
         yds = yd_tu * TILE_S
+
         # Remove room offset to be collision index
         x_tu = xd_tu - ROOM_X_TU
         y_tu = yd_tu - ROOM_Y_TU
+        
         # Cursor position global pos
         xs = xds - CAM_RECT.x
         ys = yds - CAM_RECT.y

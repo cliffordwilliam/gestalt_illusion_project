@@ -30,11 +30,17 @@ class Room:
         with open(JSONS_PATHS[self.name], 'r') as data:
             self.room_data = load(data)
 
-        # Room layers
-        self.bg_layers = self.room_data["BG_LAYERS"]
+        # Dicts of regions for drawing all bg AND ACTOR - ACTOR DRAW AND UPDATE THEMSELVES
+        self.bg_draw_update_layers = self.room_data["BG_LAYERS"]
+
+        # The lookup map for static solid tiles
         self.collision_layer = self.room_data["COLLISION_LAYER"]
+
+        # Dicts of regions to draw collision sprites AND ACTOR - ACTOR DRAW AND UPDATE THEMSELVES
         self.collision_draw_update_layer = [
             x for x in self.collision_layer if x != 0]
+
+        # Dicts of region for drawing fg
         self.fg_layers = self.room_data["FG_LAYERS"]
 
         # Room rect, room camera limit
@@ -56,33 +62,40 @@ class Room:
         self.sprite_sheet_surf = pg.image.load(
             self.sprite_sheet_path).convert_alpha()
 
-        # Check if there are any actors in bg layers
-        for i in range(len(self.bg_layers)):
-            room = self.bg_layers[i]
+        # Check if there are any actors in bg_draw_update_layers
+        for i in range(len(self.bg_draw_update_layers)):
+            room = self.bg_draw_update_layers[i]
             for j in range(len(room)):
                 sprite = room[j]
                 if sprite != 0:
                     sprite_name = sprite["name"]
                     x = sprite["xds"]
                     y = sprite["yds"]
+                    # Found?
                     if sprite_name in a.game.actors:
+                        # Instance
                         actor = a.game.actors[sprite_name]()
                         actor.rect.x = x
                         actor.rect.y = y
                         actor.rect.y -= actor.rect.height - TILE_S
-                        self.bg_layers[i][j] = {"name": "actor", "obj": actor}
+                        # Replace the dict with this instance in bg_draw_update_layers
+                        self.bg_draw_update_layers[i][j] = {
+                            "name": "actor", "obj": actor}
 
-        # Check if there are any actors in collision layer
+        # Check if there are any actors in collision_draw_update_layer
         for i in range(len(self.collision_draw_update_layer)):
             sprite = self.collision_draw_update_layer[i]
             sprite_name = sprite["name"]
             x = sprite["xds"]
             y = sprite["yds"]
+            # Found?
             if sprite_name in a.game.actors:
+                # Instance
                 actor = a.game.actors[sprite_name]()
                 actor.rect.x = x
                 actor.rect.y = y
                 actor.rect.y -= actor.rect.height - TILE_S
+                # Replace dict with this instance in collision_draw_update_layer
                 self.collision_draw_update_layer[i] = {
                     "name": "actor", "obj": actor}
 
@@ -95,11 +108,17 @@ class Room:
         with open(JSONS_PATHS[self.name], 'r') as data:
             self.room_data = load(data)
 
-        # Room layers
-        self.bg_layers = self.room_data["BG_LAYERS"]
+        # Dicts of regions for drawing all bg AND ACTOR - ACTOR DRAW AND UPDATE THEMSELVES
+        self.bg_draw_update_layers = self.room_data["BG_LAYERS"]
+
+        # The lookup map for static solid tiles
         self.collision_layer = self.room_data["COLLISION_LAYER"]
+
+        # Dicts of regions to draw collision sprites AND ACTOR - ACTOR DRAW AND UPDATE THEMSELVES
         self.collision_draw_update_layer = [
             x for x in self.collision_layer if x != 0]
+
+        # Dicts of region for drawing fg
         self.fg_layers = self.room_data["FG_LAYERS"]
 
         # Room rect, room camera limit
@@ -122,34 +141,40 @@ class Room:
             self.sprite_sheet_surf = pg.image.load(
                 self.sprite_sheet_path).convert_alpha()
 
-        # Check if there are any actors in bg layers
-        for i in range(len(self.bg_layers)):
-            room = self.bg_layers[i]
+        # Check if there are any actors in bg_draw_update_layers
+        for i in range(len(self.bg_draw_update_layers)):
+            room = self.bg_draw_update_layers[i]
             for j in range(len(room)):
                 sprite = room[j]
                 if sprite != 0:
                     sprite_name = sprite["name"]
                     x = sprite["xds"]
                     y = sprite["yds"]
-                    # Instance actor and place it in bg layer
+                    # Found?
                     if sprite_name in a.game.actors:
+                        # Instance
                         actor = a.game.actors[sprite_name]()
                         actor.rect.x = x
                         actor.rect.y = y
-                        actor.rect.y -= actor.rect.height
-                        self.bg_layers[i][j] = {"name": "actor", "obj": actor}
+                        actor.rect.y -= actor.rect.height - TILE_S
+                        # Replace the dict with this instance in bg_draw_update_layers
+                        self.bg_draw_update_layers[i][j] = {
+                            "name": "actor", "obj": actor}
 
-        # Check if there are any actors in collision layer
+        # Check if there are any actors in collision_draw_update_layer
         for i in range(len(self.collision_draw_update_layer)):
             sprite = self.collision_draw_update_layer[i]
             sprite_name = sprite["name"]
             x = sprite["xds"]
             y = sprite["yds"]
+            # Found?
             if sprite_name in a.game.actors:
+                # Instance
                 actor = a.game.actors[sprite_name]()
                 actor.rect.x = x
                 actor.rect.y = y
                 actor.rect.y -= actor.rect.height - TILE_S
+                # Replace dict with this instance in collision_draw_update_layer
                 self.collision_draw_update_layer[i] = {
                     "name": "actor", "obj": actor}
 
@@ -158,7 +183,7 @@ class Room:
         if a.camera == None:
             return
 
-        # Each names are unique ids
+        # Each names are unique ids, be sure to add the available bg in json manually
         if self.bg1 == "sky":
             x = (-a.camera.rect.x * 0.05) % NATIVE_W
             NATIVE_SURF.blit(self.sprite_sheet_surf, (x, 0), (0, 0, 320, 179))
@@ -200,13 +225,15 @@ class Room:
                              (0, 48), (0, 512, 320, 128))
         # endregion
 
-        # region Draw all bg sprites
-        for room in self.bg_layers:
+        # region Draw bg_draw_update_layers
+        for room in self.bg_draw_update_layers:
             for item in room:
-                # Found actor? Call their draw
+                # Found actor?
                 if item["name"] == "actor":
                     sprite = item["obj"]
+                    # In camera?
                     if (a.camera.rect.x - sprite.rect.width <= sprite.rect.x < a.camera.rect.right) and (a.camera.rect.y - sprite.rect.height <= sprite.rect.y < a.camera.rect.bottom):
+                        # Tell them to draw themselves
                         sprite.draw()
                         continue
 
@@ -217,17 +244,19 @@ class Room:
                     yd = item["yds"] - a.camera.rect.y
                     NATIVE_SURF.blit(self.sprite_sheet_surf,
                                      (xd, yd), item["region"])
+        # endregion Draw bg_draw_update_layers
 
-        # region Draw all collision actor sprites
+        # region Draw collision_draw_update_layer HERE BECAUSE ENEMIES ARE BEFORE PLAYER AND FG
         for item in self.collision_draw_update_layer:
-            # Found actor? Call their draw
+            # Found actor? Tell them to draw themselves
             if item["name"] == "actor":
                 sprite = item["obj"]
+                # In camera?
                 if (a.camera.rect.x - sprite.rect.width <= sprite.rect.x < a.camera.rect.right) and (a.camera.rect.y - sprite.rect.height <= sprite.rect.y < a.camera.rect.bottom):
+                    # Tell them to draw themselves
                     sprite.draw()
                     continue
-        # endregion Draw all collision actor sprites
-        # endregion Draw all bg sprites
+        # endregion Draw collision_draw_update_layer HERE BECAUSE ENEMIES ARE BEFORE PLAYER AND FG
 
     def draw_fg(self):
         # Camera not ready? return
@@ -263,20 +292,26 @@ class Room:
             return
 
         # region Update all bg sprites
-        for room in self.bg_layers:
+        for room in self.bg_draw_update_layers:
+            # Found actor? Tell them to update themselves
             for item in room:
                 if item["name"] == "actor":
                     sprite = item["obj"]
+                    # In camera?
                     if (a.camera.rect.x - sprite.rect.width <= sprite.rect.x < a.camera.rect.right) and (a.camera.rect.y - sprite.rect.height <= sprite.rect.y < a.camera.rect.bottom):
+                        # Tell them to update themselves
                         sprite.update(dt)
                         continue
         # endregion Update all bg sprites
 
         # region Update all collision actors
         for item in self.collision_draw_update_layer:
+            # Found actor? Tell them to update themselves
             if item["name"] == "actor":
                 sprite = item["obj"]
+                # In camera?
                 if (a.camera.rect.x - sprite.rect.width <= sprite.rect.x < a.camera.rect.right) and (a.camera.rect.y - sprite.rect.height <= sprite.rect.y < a.camera.rect.bottom):
+                    # Tell them to update themselves
                     sprite.update(dt)
                     continue
         # endregion Update all collision actors

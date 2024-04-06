@@ -6,21 +6,6 @@ import autoload as a
 
 class Player:
     def __init__(self):
-        # region Debug stuff
-        self.frame_counter = 0
-        self.collided_cell_type = ""
-        self.collided_cell_name = ""
-        # endregion Debug stuff
-
-        # region Font for debug
-        self.font = font.Font(
-            TTFS_DATA["cg_pixel_3x5_mono.ttf"]["path"],
-            TTFS_DATA["cg_pixel_3x5_mono.ttf"]["h"]
-        )
-        self.font_h = TTFS_DATA["cg_pixel_3x5_mono.ttf"]["h"]
-        self.font_w = TTFS_DATA["cg_pixel_3x5_mono.ttf"]["w"]
-        # endregion Font for debug
-
         # Name
         self.name = "Player"
 
@@ -28,6 +13,8 @@ class Player:
         self.is_left_pressed = 0
         self.is_right_pressed = 0
         self.is_down_pressed = False
+        self.is_jump_just_pressed = False
+        self.is_jump_just_released = False
         # endregion Inputs
 
         # region Player sprite sheets
@@ -55,7 +42,7 @@ class Player:
         # State
         self.state = "idle"
 
-        # Facing direction
+        # Facing direction (when direction is 0, I still need to know where I am, this determine when I turn)
         self.facing_direction = 1
         self.old_facing_direction = self.facing_direction
 
@@ -87,10 +74,10 @@ class Player:
             self.rect.center[1]
         ]
 
-        # Set to false on next frame immediately after falling 1 frame
+        # Set to false on next frame immediately after falling for 1 frame distance
         self.is_thin_fall = False
 
-    # Called by kinematic
+    # Called by kinematic - this is for static things
     def on_collide(self, cells):
         # World not ready? Return
         if a.world == None:
@@ -104,6 +91,16 @@ class Player:
             # Prioritize solids, found solid first? Stop
             if cell["type"] == "Solid":
                 return True
+
+            # Found thin?
+            elif cell["type"] == "Thin":
+                # Not passing thru?
+                if self.is_thin_fall == False:
+                    # If I am falling
+                    if self.velocity.y > 0:
+                        # Player real rect feet flushed on it? Stop
+                        if (self.rect.bottom - cell["yds"]) == 0:
+                            return True
 
             # Found door next? Pass thru it, handle vel
             elif cell["type"] == "Door":
@@ -131,73 +128,32 @@ class Player:
                     self.kinematic.remainder_x = 0
                     return False
 
-            # Found thin?
-            elif cell["type"] == "Thin":
-                # Not passing thru?
-                if self.is_thin_fall == False:
-                    # If I am falling
-                    if self.velocity.y > 0:
-                        # Player real rect feet flushed on it? Stop
-                        if (self.rect.bottom - cell["yds"]) == 0:
-                            return True
-
     def event(self, event):
         if event.type == pg.KEYDOWN:
-            # Just pressed left
             if event.key == a.game.key_bindings["left"]:
-                # Set is pressed left 1
                 self.is_left_pressed = 1
 
-            # Just pressed right
             if event.key == a.game.key_bindings["right"]:
-                # Set is pressed right 1
                 self.is_right_pressed = 1
 
-            # Just pressed down
             if event.key == a.game.key_bindings["down"]:
-                # Set is pressed down true
                 self.is_down_pressed = True
 
-            # Just pressed jump
             elif event.key == a.game.key_bindings["jump"]:
-                # Idle, run crouch can jump
-                if self.state in [
-                    "idle",
-                    "run",
-                    "crouch"
-                ]:
-
-                    # Cannot crouch to jump if on thin
-                    if self.state == "crouch":
-                        if self.collided_cell_type == "Thin":
-                            # Can pass thru thin
-                            self.is_thin_fall = True
-                            return
-
-                    # Exit up
-                    self.set_state("up")
+                self.is_jump_just_pressed = True
 
         elif event.type == pg.KEYUP:
-            # Just released left
             if event.key == a.game.key_bindings["left"]:
-                # Set is released left 0
                 self.is_left_pressed = 0
 
-            # Just released right
             if event.key == a.game.key_bindings["right"]:
-                # Set is released right 0
                 self.is_right_pressed = 0
 
-            # Just released down
             if event.key == a.game.key_bindings["down"]:
-                # Set is released down false
                 self.is_down_pressed = False
 
-            # Just released jump
             elif event.key == a.game.key_bindings["jump"]:
-                # Idle, run crouch can jump
-                if self.state == "up":
-                    self.gravity = self.heavy_gravity
+                self.is_jump_just_released = True
 
     def draw(self):
         # Room not ready? Return
@@ -220,175 +176,18 @@ class Player:
         )
         # endregion Draw player to native surface
 
-        # region Debug draw
-        if a.game.is_debug == True:
-            # region Draw grid
-            for i in range(20):
-                offset = TILE_S * i
-                xd = (offset - a.camera.rect.x) % NATIVE_W
-                yd = (offset - a.camera.rect.y) % NATIVE_H
-                pg.draw.line(DEBUG_SURF, "grey4", (xd, 0), (xd, NATIVE_H))
-                pg.draw.line(DEBUG_SURF, "grey4", (0, yd), (NATIVE_W, yd))
-            xd = -a.camera.rect.x % NATIVE_W
-            yd = -a.camera.rect.y % NATIVE_H
-            pg.draw.line(DEBUG_SURF, "grey8", (xd, 0), (xd, NATIVE_H))
-            pg.draw.line(DEBUG_SURF, "grey8", (0, yd), (NATIVE_W, yd))
-            self.font.render_to(
-                DEBUG_SURF, (xd + self.font_w, yd + self.font_h), f"{
-                    int(a.camera.rect.x - 1) // NATIVE_W + 1}{
-                    int(a.camera.rect.y - 1) // NATIVE_H + 1}", "white"
-            )
-            # endregion Draw grid
-
-            # region Draw fps
-            self.font.render_to(
-                DEBUG_SURF,
-                (self.font_w, self.font_h),
-                f'fps: {int(CLOCK.get_fps())}',
-                "white",
-                "black"
-            )
-            # endregion Draw fps
-
-            # region Draw frame counter
-            self.font.render_to(
-                DEBUG_SURF,
-                (self.font_w, self.font_h * 3),
-                f'frame: {self.frame_counter}',
-                "white",
-                "black"
-            )
-            # endregion Draw frame counter
-
-            # region Draw current animation
-            self.font.render_to(
-                DEBUG_SURF,
-                (self.font_w, self.font_h * 5),
-                f'current animation: {self.animator.current_animation}',
-                "white",
-                "black"
-            )
-            # endregion Draw current animation
-
-            # region Draw collision
-            self.font.render_to(
-                DEBUG_SURF,
-                (self.font_w, self.font_h * 7),
-                f'collision type: {self.collided_cell_type}',
-                "white",
-                "black"
-            )
-            # endregion Draw collision
-
-            # region Draw collision
-            self.font.render_to(
-                DEBUG_SURF,
-                (self.font_w, self.font_h * 9),
-                f'collision name: {self.collided_cell_name}',
-                "white",
-                "black"
-            )
-            # endregion Draw collision
-
-            # region Draw is on floor
-            self.font.render_to(
-                DEBUG_SURF,
-                (self.font_w, self.font_h * 11),
-                f'is on floor: {self.kinematic.is_on_floor}',
-                "white",
-                "black"
-            )
-            # endregion Draw is on floor
-
-            # region Draw is on wall
-            self.font.render_to(
-                DEBUG_SURF,
-                (self.font_w, self.font_h * 13),
-                f'is on wall: {self.kinematic.is_on_wall}',
-                "white",
-                "black"
-            )
-            # endregion Draw is on wall
-
-            # region Draw is on wall
-            self.font.render_to(
-                DEBUG_SURF,
-                (self.font_w, self.font_h * 15),
-                f'state: {self.state}',
-                "white",
-                "black"
-            )
-            # endregion Draw is on wall
-
-            # region Draw look dir
-            value = "right" if self.facing_direction == 1 else "left"
-            self.font.render_to(
-                DEBUG_SURF,
-                (self.font_w, self.font_h * 17),
-                f'facing direction: {value}',
-                "white",
-                "black"
-            )
-            # endregion Draw look dir
-
-            # region Draw look dir
-            value = "false" if self.is_thin_fall == False else "true"
-            self.font.render_to(
-                DEBUG_SURF,
-                (self.font_w, self.font_h * 19),
-                f'fall thru: {value}',
-                "white",
-                "black"
-            )
-            # endregion Draw look dir
-
-            # region Draw my rect in tu tile
-            # pos -> tu
-            x_tu = (self.rect.centerx // TILE_S) - a.room.x_tu
-            y_tu = (self.rect.centery // TILE_S) - a.room.y_tu
-            # tu -> xds
-            xds = ((x_tu + a.room.x_tu) * TILE_S) - \
-                a.camera.rect.x
-            yds = ((y_tu + a.room.y_tu) * TILE_S) - \
-                a.camera.rect.y
-            pg.draw.lines(
-                DEBUG_SURF,
-                "aqua",
-                True,
-                [
-                    (xds, yds),
-                    (xds + TILE_S, yds),
-                    (xds + TILE_S, yds + TILE_S),
-                    (xds, yds + TILE_S),
-                ]
-            )
-            # endregion Draw my rect in tu tile
-        # endregion Debug draw
-
     def update(self, dt):
         # Game not ready? Return
         if a.game == None:
             return
 
-        # region Update debug stuff
-        self.collided_cell_type = ""
-        self.collided_cell_name = ""
-        # endregion Update debug stuff
-
         # Update animation node
         self.animator.update(dt)
 
-        # region Debug update
-        if a.game.is_debug == True:
-            self.frame_counter += 1
-            if self.frame_counter == 61:
-                self.frame_counter = 0
-        # endregion Debug update
-
-        # region Update velocity with gravity
+        # region Update y velocity with gravity
         self.velocity.y += self.gravity * dt
         self.velocity.y = min(self.velocity.y, self.max_fall)
-        # endregion Update velocity with gravity
+        # endregion Update y velocity with gravity
 
         # region Update x velocity with direction
         self.velocity.x = pg.math.lerp(
@@ -421,106 +220,161 @@ class Player:
 
         # Idle
         if self.state == "idle":
+            # Always prioritize exits first, prioritize falling exit then up exit
+            # region Exit to down
+            if not self.kinematic.is_on_floor:
+                self.set_state("down")
+                return
+            # endregion Exit to down
+
+            # region Exit to up
+            elif self.kinematic.is_on_floor and self.is_jump_just_pressed:
+                self.set_state("up")
+                return
+            # endregion Exit to up
+
             # region Exit to run
-            if self.direction != 0 and not self.kinematic.is_on_wall:
+            elif self.kinematic.is_on_floor and self.direction != 0 and not self.kinematic.is_on_wall:
                 self.set_state("run")
+                return
             # endregion Exit to run
 
             # region Exit to crouch
-            elif self.is_down_pressed:
+            elif self.kinematic.is_on_floor and self.is_down_pressed:
                 self.set_state("crouch")
+                return
             # endregion Exit to crouch
 
-            # region Exit to down
-            elif not self.kinematic.is_on_floor:
-                self.set_state("down")
-            # endregion Exit to down
-
-            # Exit jump in just pressed event input
+            # Then handle in state logic
 
         # Run
         elif self.state == "run":
+            # Always prioritize exits first, prioritize falling exit
+            # region Exit to down
+            if not self.kinematic.is_on_floor:
+                self.set_state("down")
+                return
+            # endregion Exit to down
+
+            # region Exit to up
+            elif self.kinematic.is_on_floor and self.is_jump_just_pressed:
+                self.set_state("up")
+                return
+            # endregion Exit to up
+
             # region Exit to idle
-            if self.direction == 0 or self.kinematic.is_on_wall:
+            elif self.kinematic.is_on_floor and self.direction == 0 or self.kinematic.is_on_wall:
                 self.set_state("idle")
+                return
             # endregion Exit to idle
 
             # region Exit to crouch
-            elif self.is_down_pressed:
+            elif self.kinematic.is_on_floor and self.is_down_pressed:
                 self.set_state("crouch")
+                return
             # endregion Exit to crouch
 
-            # region Exit to down
-            elif not self.kinematic.is_on_floor:
-                self.set_state("down")
-            # endregion Exit to down
-
-            # Exit jump in just pressed event input
-
+            # Then handle in state logic
             # region Handle turning - frame perfect
+            # Update sprite flip
             if self.facing_direction == 1:
                 self.current_sprite_sheet = self.sprite_sheet
             elif self.facing_direction == -1:
                 self.current_sprite_sheet = self.sprite_sheet_flip
+
+            # Turn?
             if self.old_facing_direction != self.facing_direction:
                 self.animator.set_current_animation("turn")
             # endregion Handle turning - frame perfect
 
         # Crouch
         elif self.state == "crouch":
+            # Always prioritize exits first, prioritize falling exit
+            # region Exit to down
+            if not self.kinematic.is_on_floor:
+                self.set_state("down")
+                return
+            # endregion Exit to down
+
+            # region Exit to up OR DOWN PASS THRU THIN
+            elif self.kinematic.is_on_floor and self.is_down_pressed and self.is_jump_just_pressed:
+                # Crouching and just pressed jump?
+                if self.collided_cell_type == "Thin":
+                    # Did that on a thin? Pass thru next frame and this state will kick to down
+                    self.is_thin_fall = True
+                    return
+                else:
+                    # Did that on solid? Jump
+                    self.set_state("up")
+                    return
+            # endregion Exit to up
+
             # region Exit to run
-            if not self.is_down_pressed and self.direction != 0:
+            elif self.kinematic.is_on_floor and not self.is_down_pressed and self.direction != 0:
                 self.set_state("run")
+                return
             # endregion Exit to run
 
             # region Exit to idle
-            elif not self.is_down_pressed and self.direction == 0:
+            elif self.kinematic.is_on_floor and not self.is_down_pressed and self.direction == 0:
                 self.set_state("idle")
+                return
             # endregion Exit to idle
 
-            # region Exit to down
-            elif not self.kinematic.is_on_floor:
-                self.set_state("down")
-            # endregion Exit to down
-
-            # Exit jump in just pressed event input
-
+            # Then handle in state logic
             # Cannot move direction 0
             self.direction = 0
 
         # Up
         elif self.state == "up":
+            # Always prioritize exits first, prioritize falling exit
             # region Exit to down
             if self.velocity.y > 0:
                 self.set_state("down")
+                return
             # endregion Exit to down
+
+            # Then handle in state logic
+            # Jump was released while going up? Heavy gravity
+            if self.is_jump_just_released == True:
+                self.gravity = self.heavy_gravity
 
         # Down
         elif self.state == "down":
+            # Always prioritize exits first, prioritize falling exit
             # region Exit to run
             if self.kinematic.is_on_floor and self.direction != 0:
                 self.set_state("run")
+                return
             # endregion Exit to run
 
             # region Exit to idle
             if self.kinematic.is_on_floor and self.direction == 0:
                 self.set_state("idle")
+                return
             # endregion Exit to idle
 
             # region Exit to crouch
             if self.kinematic.is_on_floor and self.is_down_pressed:
                 self.set_state("crouch")
+                return
             # endregion Exit to crouch
 
-        # region Update camera anchor
-        if self.current_sprite_sheet == self.sprite_sheet:
-            self.facing_direction = 1
-        elif self.current_sprite_sheet == self.sprite_sheet_flip:
-            self.facing_direction = -1
+            # region Exit to up
+            if self.kinematic.is_on_floor and self.is_jump_just_pressed:
+                self.set_state("up")
+                return
+            # endregion Exit to up
+
+        # region Update my camera anchor to follow me
         self.camera_anchor[0] = self.rect.x + \
             (self.facing_direction * (2 * TILE_S))
         self.camera_anchor[1] = self.rect.y
-        # endregion Update camera anchor
+        # endregion Update my camera anchor to follow me
+
+        # Reset if before this update call the event toggle this to true, event is called first
+        self.is_jump_just_pressed = False
+        self.is_jump_just_released = False
 
     # Set state
     def set_state(self, value):
@@ -532,10 +386,13 @@ class Player:
             # To run
             if self.state == "run":
                 # region Handle turning
+                # Update the flip sprite
                 if self.facing_direction == 1:
                     self.current_sprite_sheet = self.sprite_sheet
                 elif self.facing_direction == -1:
                     self.current_sprite_sheet = self.sprite_sheet_flip
+
+                # Turn animation or not?
                 if self.old_facing_direction == self.facing_direction:
                     # Play run transition animation
                     self.animator.set_current_animation("idle_to_run")
@@ -559,7 +416,7 @@ class Player:
 
             # To down
             elif self.state == "down":
-                # Remove grav build up
+                # Remove grav build up if fall off cliff
                 self.velocity.y = 0
 
                 # set Heavy gravity
@@ -609,10 +466,13 @@ class Player:
             # To run
             elif self.state == "run":
                 # region Handle turning
+                # Update the flip sprite
                 if self.facing_direction == 1:
                     self.current_sprite_sheet = self.sprite_sheet
                 elif self.facing_direction == -1:
                     self.current_sprite_sheet = self.sprite_sheet_flip
+
+                # Turn animation or not?
                 if self.old_facing_direction == self.facing_direction:
                     # Play run transition animation
                     self.animator.set_current_animation("idle_to_run")
@@ -663,10 +523,13 @@ class Player:
             # To run
             if self.state == "run":
                 # region Handle turning
+                # Update the flip sprite
                 if self.facing_direction == 1:
                     self.current_sprite_sheet = self.sprite_sheet
                 elif self.facing_direction == -1:
                     self.current_sprite_sheet = self.sprite_sheet_flip
+
+                # Turn animation or not?
                 if self.old_facing_direction == self.facing_direction:
                     # Play run transition animation
                     self.animator.set_current_animation("idle_to_run")
@@ -679,3 +542,11 @@ class Player:
             elif self.state == "crouch":
                 # Play crouch animation
                 self.animator.set_current_animation("crouch")
+
+            # To up
+            elif self.state == "up":
+                # Set jump vel
+                self.velocity.y = self.jump_vel
+
+                # Play up animation
+                self.animator.set_current_animation("up")
