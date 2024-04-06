@@ -15,12 +15,12 @@ class Camera:
 
     Notes:
         - 0.09 (player speed) * dt (distance) * 0.2 (lerp) -> 0.288 (distance / frame)
-        - camera have to cover 32px, so 32 (distance) * 0.009 (lerp) = 0.288 (distance / frame)
+        - camera have to cover 16px, so 16 (distance) * 0.018 (lerp) = 0.288 (distance / frame)
     '''
 
     def __init__(self):
         self.rect = pg.FRect(0, 0, NATIVE_W, NATIVE_H)
-        self.lerp_weight = 0.009
+        self.lerp_weight = 0.018
         self.target = [0, 0]
         self.target_x = 0
         self.target_y = 0

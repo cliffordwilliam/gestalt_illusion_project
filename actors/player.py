@@ -70,7 +70,7 @@ class Player:
 
         # Camera anchor
         self.camera_anchor = [
-            self.rect.center[0] + (self.facing_direction * (2 * TILE_S)),
+            self.rect.center[0] + (self.facing_direction * TILE_S),
             self.rect.center[1]
         ]
 
@@ -339,6 +339,12 @@ class Player:
             if self.is_jump_just_released == True:
                 self.gravity = self.heavy_gravity
 
+            # Update sprite
+            if self.facing_direction == 1:
+                self.current_sprite_sheet = self.sprite_sheet
+            elif self.facing_direction == -1:
+                self.current_sprite_sheet = self.sprite_sheet_flip
+
         # Down
         elif self.state == "down":
             # Always prioritize exits first, prioritize falling exit
@@ -366,9 +372,15 @@ class Player:
                 return
             # endregion Exit to up
 
+            # Update sprite
+            if self.facing_direction == 1:
+                self.current_sprite_sheet = self.sprite_sheet
+            elif self.facing_direction == -1:
+                self.current_sprite_sheet = self.sprite_sheet_flip
+
         # region Update my camera anchor to follow me
         self.camera_anchor[0] = self.rect.center[0] + \
-            (self.facing_direction * (2 * TILE_S))
+            (self.facing_direction * TILE_S)
         self.camera_anchor[1] = self.rect.center[1]
         # endregion Update my camera anchor to follow me
 
