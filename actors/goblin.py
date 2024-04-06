@@ -1,6 +1,7 @@
 from constants import *
 from nodes.animator import Animator
 from nodes.kinematic import Kinematic
+from nodes.timer import Timer
 import autoload as a
 
 
@@ -9,13 +10,13 @@ class Goblin:
         # Name
         self.name = "Goblin"
 
-        # region Player sprite sheets
+        # region sprite sheets
         self.sprite_sheet = pg.image.load(
             PNGS_PATHS["goblin_sprite_sheet.png"])
         self.sprite_sheet_flip = pg.image.load(
             PNGS_PATHS["goblin_flip_sprite_sheet.png"])
         self.current_sprite_sheet = self.sprite_sheet
-        # endregion Player sprite sheets
+        # endregion sprite sheets
 
         # region Surface offset
         self.surface_offset_x = 37
@@ -52,14 +53,19 @@ class Goblin:
         # Kinematic
         self.kinematic = Kinematic(self)
 
-        # To go back in time
-        self.old_position_x = 0
-        self.old_position_y = 0
-
         # Timer to toggle between idle and run
-        self.timer = 0
-        self.idle_duration = 2000
-        self.run_duration = 4000
+        self.idle_timer = Timer(2000)
+        self.run_timer = Timer(4000)
+        self.idle_timer.add_event_listener(self.on_idle_timer_end, "timer_end")
+        self.run_timer.add_event_listener(self.on_run_timer_end, "timer_end")
+
+    # Timer callback
+    def on_idle_timer_end(self):
+        self.set_state("run")
+
+    # Timer callback
+    def on_run_timer_end(self):
+        self.set_state("idle")
 
     # Called by kinematic
     def on_collide(self, cells):
@@ -97,13 +103,13 @@ class Goblin:
         if a.game == None:
             return
 
-        # region Draw player to native surface
+        # region Draw to native surface
         xds = (self.rect.x - self.surface_offset_x) - a.camera.rect.x
         yds = (self.rect.y - self.surface_offset_y) - a.camera.rect.y
         NATIVE_SURF.blit(
             self.current_sprite_sheet, (xds, yds), self.region
         )
-        # endregion Draw player to native surface
+        # endregion Draw to native surface
 
     def update(self, dt):
         # Game not ready? Return
@@ -122,28 +128,20 @@ class Goblin:
         self.velocity.x = self.direction * self.max_run
         # endregion Update x velocity with direction
 
-        # Update old position
-        self.old_position_x = self.rect.x
-        self.old_position_y = self.rect.y
+        # Get old position
+        old_position_x = self.rect.x
+        old_position_y = self.rect.y
 
         # Update pos with vel
         self.kinematic.move(dt)
 
         # Idle
         if self.state == "idle":
-            # region Exit to run
-            self.timer += dt
-            if self.timer > self.idle_duration:
-                self.set_state("run")
-            # endregion Exit to run
+            self.idle_timer.update(dt)
 
         # Run
         elif self.state == "run":
-            # region Exit to idle
-            self.timer += dt
-            if self.timer > self.run_duration:
-                self.set_state("idle")
-            # endregion Exit to idle
+            self.run_timer.update(dt)
 
             # region Bounce off wall
             if self.kinematic.is_on_wall:
@@ -165,8 +163,8 @@ class Goblin:
                     self.current_sprite_sheet = self.sprite_sheet_flip
 
                 # Go back in time, prev frame pos
-                self.rect.x = self.old_position_x
-                self.rect.y = self.old_position_y
+                self.rect.x = old_position_x
+                self.rect.y = old_position_y
             # endregion Not walk off cliffs
 
     # Set state
@@ -174,19 +172,16 @@ class Goblin:
         old_state = self.state
         self.state = value
 
-        # Reset timer
-        self.timer = 0
-
         # From idle
         if old_state == "idle":
             # To run
             if self.state == "run":
-                # region Set direction input based on sprite sheet
+                # region Set direction input based on sprite sheet right now
                 if self.current_sprite_sheet == self.sprite_sheet:
                     self.direction = 1
                 elif self.current_sprite_sheet == self.sprite_sheet_flip:
                     self.direction = -1
-                # endregion Set direction input based on sprite sheet
+                # endregion Set direction input based on sprite sheet right now
 
                 # Play run animation
                 self.animator.set_current_animation("run")
