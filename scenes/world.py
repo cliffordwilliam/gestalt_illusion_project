@@ -19,8 +19,7 @@ class World:
         a.player.rect.x = 32
         a.player.rect.bottom = 144
 
-        a.camera.set_target(a.player.camera_anchor)
-        a.camera.set_lerp_weight(0.018)
+        a.camera.set_target(a.player)
 
         # Curtain belongs to world, it needs to distinguish the callback
         self.transition_curtain = Curtain(50, "empty")

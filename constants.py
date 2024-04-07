@@ -60,3 +60,9 @@ EVENTS = [pg.KEYDOWN, pg.KEYUP, pg.QUIT]
 DEBUG_SURF = pg.Surface((NATIVE_W, NATIVE_H))
 DEBUG_SURF.set_colorkey("red")
 DEBUG_RECT = DEBUG_SURF.get_rect()
+
+# Convenience global font for debug
+FONT = font.Font(
+    TTFS_DATA["cg_pixel_3x5_mono.ttf"]["path"],
+    TTFS_DATA["cg_pixel_3x5_mono.ttf"]["h"],
+)
