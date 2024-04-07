@@ -176,6 +176,19 @@ class Player:
         )
         # endregion Draw player to native surface
 
+        # Debug draw states
+        x = self.rect.x - a.camera.rect.x
+        y = self.rect.y - a.camera.rect.y - TILE_S
+        if a.game.is_debug:
+            FONT.render_to(DEBUG_SURF, (x, y),
+                           f'state: {self.state}', "white", "black")
+
+        x = self.rect.x - a.camera.rect.x
+        y = self.rect.y - a.camera.rect.y - (2 * FONT_H)
+        if a.game.is_debug:
+            FONT.render_to(DEBUG_SURF, (x, y),
+                           f'face: {self.facing_direction}', "white", "black")
+
     def update(self, dt):
         # Game not ready? Return
         if a.game == None:

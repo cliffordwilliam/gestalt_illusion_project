@@ -59,6 +59,9 @@ class Goblin:
         self.idle_timer.add_event_listener(self.on_idle_timer_end, "timer_end")
         self.run_timer.add_event_listener(self.on_run_timer_end, "timer_end")
 
+        # For indicating the sprite flip or not, easier to read
+        self.facing_direction = 1
+
     # Timer callback
     def on_idle_timer_end(self):
         self.set_state("run")
@@ -111,6 +114,19 @@ class Goblin:
         )
         # endregion Draw to native surface
 
+        # Debug draw states
+        x = self.rect.x - a.camera.rect.x
+        y = self.rect.y - a.camera.rect.y - TILE_S
+        if a.game.is_debug:
+            FONT.render_to(DEBUG_SURF, (x, y),
+                           f'state: {self.state}', "white", "black")
+
+        x = self.rect.x - a.camera.rect.x
+        y = self.rect.y - a.camera.rect.y - (2 * FONT_H)
+        if a.game.is_debug:
+            FONT.render_to(DEBUG_SURF, (x, y),
+                           f'face: {self.facing_direction}', "white", "black")
+
     def update(self, dt):
         # Game not ready? Return
         if a.game == None:
@@ -158,8 +174,10 @@ class Goblin:
                 # Update sprite to follow direction
                 if self.direction == 1:
                     self.current_sprite_sheet = self.sprite_sheet
+                    self.facing_direction = 1
                 elif self.direction == -1:
                     self.current_sprite_sheet = self.sprite_sheet_flip
+                    self.facing_direction = -1
             # endregion Pressing against wall?
 
             # region Walked off cliff?
@@ -170,8 +188,10 @@ class Goblin:
                 # Update sprite to follow direction
                 if self.direction == 1:
                     self.current_sprite_sheet = self.sprite_sheet
+                    self.facing_direction = 1
                 elif self.direction == -1:
                     self.current_sprite_sheet = self.sprite_sheet_flip
+                    self.facing_direction = -1
 
                 # Go back in time, set current pos to prev frame pos
                 self.rect.x = old_position_x

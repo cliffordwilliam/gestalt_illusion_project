@@ -106,6 +106,10 @@ class World:
         # Draw curtain
         self.transition_curtain.draw()
 
+        if a.game.is_debug:
+            FONT.render_to(DEBUG_SURF, (0, 0),
+                           f'fps: {int(CLOCK.get_fps())}', "white", "black")
+
     def update(self, dt):
         if self.state == "Playing":
             # Update player

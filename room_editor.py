@@ -647,8 +647,8 @@ while 1:
                     # Handle each room in all layers
                     room = LAYERS_LIST[i]
 
-                    # Remove zeroes from non collision layers (only collision needs zeroes)
-                    if i != COLLISION_LAYER_I:
+                    # Remove zeroes from actor layer, this one is not static, static things need to use cam index to know which one to draw
+                    if i == ACTOR_LAYER_I:
                         room = [x for x in room if x != 0]
 
                     # Remove layer_i and regions from sprites prop, these are not needed for drawing in game

@@ -41,10 +41,6 @@ class Room:
         # The lookup map for static solid tiles
         self.collision_layer = self.room_data["COLLISION_LAYER"]
 
-        # Dicts of regions to draw collision sprites AND ACTOR - ACTOR DRAW AND UPDATE THEMSELVES
-        self.collision_draw_update_layer = [
-            x for x in self.collision_layer if x != 0]
-
         # Dicts of region for drawing fg
         self.fg_layers = self.room_data["FG_LAYERS"]
 
@@ -114,10 +110,6 @@ class Room:
 
         # The lookup map for static solid tiles
         self.collision_layer = self.room_data["COLLISION_LAYER"]
-
-        # Dicts of regions to draw collision sprites AND ACTOR - ACTOR DRAW AND UPDATE THEMSELVES
-        self.collision_draw_update_layer = [
-            x for x in self.collision_layer if x != 0]
 
         # Dicts of region for drawing fg
         self.fg_layers = self.room_data["FG_LAYERS"]
@@ -219,28 +211,54 @@ class Room:
                              (0, 48), (0, 512, 320, 128))
         # endregion
 
-        # region Draw bg_draw_update_layers (some bg sprites are classes, fire, water)
+        # region Draw all collision sprites
+        # Unpack cam position tl
+        cam_x = a.camera.rect.x
+        cam_y = a.camera.rect.y
+
+        # Turn coord into tu
+        cam_x_tu = cam_x // TILE_S
+        cam_y_tu = cam_y // TILE_S
+
+        # Turn tu into index, by sub cam offset
+        cam_x_tu = int(cam_x_tu - self.x_tu)
+        cam_y_tu = int(cam_y_tu - self.y_tu)
+
         for room in self.bg_draw_update_layers:
             for item in room:
-                # Found actor?
-                if item["name"] == "actor":
-                    sprite = item["obj"]
-                    # In camera?
-                    if (a.camera.rect.x - sprite.rect.width <= sprite.rect.x < a.camera.rect.right) and (a.camera.rect.y - sprite.rect.height <= sprite.rect.y < a.camera.rect.bottom):
-                        # Tell them to draw themselves
-                        sprite.draw()
-                        continue
+                # Iterate over rows
+                for row in range(12):
+                    # Iterate over columns
+                    for col in range(21):
+                        # Calculate index for the current tile
+                        index = (cam_y_tu + row) * self.w_tu + (cam_x_tu + col)
 
-                # Only draw sprites that are in view
-                if (a.camera.rect.x - item["region"][2] <= item["xds"] < a.camera.rect.right) and (a.camera.rect.y - item["region"][3] <= item["yds"] < a.camera.rect.bottom):
-                    # Not actor? Draw normal
-                    xd = item["xds"] - a.camera.rect.x
-                    yd = item["yds"] - a.camera.rect.y
-                    NATIVE_SURF.blit(self.sprite_sheet_surf,
-                                     (xd, yd), item["region"])
+                        # Makes sure its in index
+                        if 0 <= index < len(room):
+                            # Get item and grab its draw pos
+                            item = self.room[index]
+
+                            # Find air? Continue
+                            if item == 0:
+                                continue
+
+                            # Found actor?
+                            if item["name"] == "actor":
+                                sprite = item["obj"]
+                                sprite.draw()
+                                continue
+
+                            # Find item? Draw
+                            item_xd = item["xds"] - a.camera.rect.x
+                            item_yd = item["yds"] - a.camera.rect.y
+
+                            # Draw the tile
+                            NATIVE_SURF.blit(self.sprite_sheet_surf,
+                                             (item_xd, item_yd), item["region"])
         # endregion Draw bg_draw_update_layers (some bg sprites are classes, fire, water)
 
         # region Draw actors
+        # TODO: Instead of iterating over each one, use quadtree
         for actor in self.actor_layer:
             if (a.camera.rect.x - actor.rect.width <= actor.rect.x < a.camera.rect.right) and (a.camera.rect.y - actor.rect.height <= actor.rect.y < a.camera.rect.bottom):
                 # Tell them to draw themselves
@@ -253,26 +271,68 @@ class Room:
             return
 
         # region Draw all collision sprites
-        for item in self.collision_draw_update_layer:
-            if item["name"] != "actor":
-                # Only draw sprites that are in view
-                if (a.camera.rect.x - item["region"][2] <= item["xds"] < a.camera.rect.right) and (a.camera.rect.y - item["region"][3] <= item["yds"] < a.camera.rect.bottom):
-                    # Not actor? Draw normal
-                    xd = item["xds"] - a.camera.rect.x
-                    yd = item["yds"] - a.camera.rect.y
+        # Unpack cam position tl
+        cam_x = a.camera.rect.x
+        cam_y = a.camera.rect.y
+
+        # Turn coord into tu
+        cam_x_tu = cam_x // TILE_S
+        cam_y_tu = cam_y // TILE_S
+
+        # Turn tu into index, by sub cam offset
+        cam_x_tu = int(cam_x_tu - self.x_tu)
+        cam_y_tu = int(cam_y_tu - self.y_tu)
+
+        # Iterate over rows
+        for row in range(12):
+            # Iterate over columns
+            for col in range(21):
+                # Calculate index for the current tile
+                index = (cam_y_tu + row) * self.w_tu + (cam_x_tu + col)
+
+                # Makes sure its in index
+                if 0 <= index < len(self.collision_layer):
+                    # Get item and grab its draw pos
+                    item = self.collision_layer[index]
+
+                    # Find air? Continue
+                    if item == 0:
+                        continue
+
+                    # Find item? Draw
+                    item_xd = item["xds"] - a.camera.rect.x
+                    item_yd = item["yds"] - a.camera.rect.y
+
+                    # Draw the tile
                     NATIVE_SURF.blit(self.sprite_sheet_surf,
-                                     (xd, yd), item["region"])
-        # endregion Draw all collision sprites
+                                     (item_xd, item_yd), item["region"])
 
         # region Draw all fg sprites
         for room in self.fg_layers:
             for item in room:
-                # Only draw sprites that are in view
-                if (a.camera.rect.x - item["region"][2] <= item["xds"] < a.camera.rect.right) and (a.camera.rect.y - item["region"][3] <= item["yds"] < a.camera.rect.bottom):
-                    xd = item["xds"] - a.camera.rect.x
-                    yd = item["yds"] - a.camera.rect.y
-                    NATIVE_SURF.blit(self.sprite_sheet_surf,
-                                     (xd, yd), item["region"])
+                # Iterate over rows
+                for row in range(12):
+                    # Iterate over columns
+                    for col in range(21):
+                        # Calculate index for the current tile
+                        index = (cam_y_tu + row) * self.w_tu + (cam_x_tu + col)
+
+                        # Makes sure its in index
+                        if 0 <= index < len(room):
+                            # Get item and grab its draw pos
+                            item = self.room[index]
+
+                            # Find air? Continue
+                            if item == 0:
+                                continue
+
+                            # Find item? Draw
+                            item_xd = item["xds"] - a.camera.rect.x
+                            item_yd = item["yds"] - a.camera.rect.y
+
+                            # Draw the tile
+                            NATIVE_SURF.blit(self.sprite_sheet_surf,
+                                             (item_xd, item_yd), item["region"])
         # endregion all fg sprites
 
     def update(self, dt):
@@ -280,20 +340,46 @@ class Room:
         if a.camera == None:
             return
 
+        # Unpack cam position tl
+        cam_x = a.camera.rect.x
+        cam_y = a.camera.rect.y
+
+        # Turn coord into tu
+        cam_x_tu = cam_x // TILE_S
+        cam_y_tu = cam_y // TILE_S
+
+        # Turn tu into index, by sub cam offset
+        cam_x_tu = int(cam_x_tu - self.x_tu)
+        cam_y_tu = int(cam_y_tu - self.y_tu)
+
         # region Update all bg sprites (some bg sprites are classes, fire, water)
         for room in self.bg_draw_update_layers:
-            # Found actor? Tell them to update themselves
             for item in room:
-                if item["name"] == "actor":
-                    sprite = item["obj"]
-                    # In camera?
-                    if (a.camera.rect.x - sprite.rect.width <= sprite.rect.x < a.camera.rect.right) and (a.camera.rect.y - sprite.rect.height <= sprite.rect.y < a.camera.rect.bottom):
-                        # Tell them to update themselves
-                        sprite.update(dt)
-                        continue
+                # Iterate over rows
+                for row in range(12):
+                    # Iterate over columns
+                    for col in range(21):
+                        # Calculate index for the current tile
+                        index = (cam_y_tu + row) * self.w_tu + (cam_x_tu + col)
+
+                        # Makes sure its in index
+                        if 0 <= index < len(room):
+                            # Get item and grab its draw pos
+                            item = self.room[index]
+
+                            # Find air? Continue
+                            if item == 0:
+                                continue
+
+                            # Found actor?
+                            if item["name"] == "actor":
+                                sprite = item["obj"]
+                                sprite.update(dt)
+                                continue
         # endregion Update all bg sprites (some bg sprites are classes, fire, water)
 
         # region Update actors
+        # TODO: Instead of iterating over each one, use quadtree
         for actor in self.actor_layer:
             if (a.camera.rect.x - actor.rect.width <= actor.rect.x < a.camera.rect.right) and (a.camera.rect.y - actor.rect.height <= actor.rect.y < a.camera.rect.bottom):
                 # Tell them to draw themselves

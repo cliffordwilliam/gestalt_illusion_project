@@ -62,7 +62,10 @@ DEBUG_SURF.set_colorkey("red")
 DEBUG_RECT = DEBUG_SURF.get_rect()
 
 # Convenience global font for debug
+FONT_DATA = TTFS_DATA["cg_pixel_3x5_mono.ttf"]
+FONT_H = FONT_DATA["h"]
+FONT_w = FONT_DATA["w"]
 FONT = font.Font(
-    TTFS_DATA["cg_pixel_3x5_mono.ttf"]["path"],
-    TTFS_DATA["cg_pixel_3x5_mono.ttf"]["h"],
+    FONT_DATA["path"],
+    FONT_H,
 )
