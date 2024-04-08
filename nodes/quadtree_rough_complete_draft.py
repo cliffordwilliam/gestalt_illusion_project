@@ -7,13 +7,6 @@ import pygame as pg
 
 pg.init()
 
-# DONE
-# Use this for all moving stuff colluision solutions
-# average: 0.00044478706493865616 with this each iter
-# compared with naive average: 0.015027012121326943
-# Im too tired rn to make this neat, but everything u need to make a quadtree is here
-# On next commit delete this maybe idk
-
 # Run this as a separate stand alone file
 # I made this for studying how quadtrees work
 # Info and data is from:
@@ -183,6 +176,20 @@ class QuadTree:
             return True
         return False
 
+        # # Do I have actor? Remove it
+        # if given_actor in self.actors:
+        #     self.actors.remove(given_actor)
+        #     return True
+
+        # # I do not have it, check kids, kids have actor?
+        # for i in range(4):
+        #     if self.kids[i]:
+        #         if self.kids[i].remove_actor(given_actor):
+        #             return True
+
+        # # I do not have it, kids do not have it, 404 actor not found
+        # return False
+
     def relocate(self, given_actor):
         # This func is used for moving things
         # How can I remove it from quad
@@ -221,39 +228,39 @@ class Actor:
             random.uniform(-0.1, 1.0), random.uniform(-0.1, 1.0)]
 
 
-# # Quadtree init, as big as biggest room
-# quad_tree = QuadTree(
-#     pg.FRect((0.0, 0.0), (100000.0, 100000.0)))
-# quad_tree.set_rect(pg.FRect((0.0, 0.0), (100000.0, 100000.0)))
+# Quadtree init, as big as biggest room
+quad_tree = QuadTree(
+    pg.FRect((0.0, 0.0), (100000.0, 100000.0)))
+quad_tree.set_rect(pg.FRect((0.0, 0.0), (100000.0, 100000.0)))
 
 
 # Flag to toggle between quadtree and naive checks
 use_quadtree = True
-use_quadtree = False
+# use_quadtree = False
 
-# Adjusted size to fit the largest room, 640, 352, 2 by 2 room tu
-quad_tree = QuadTree(
-    pg.FRect((0.0, 0.0), (640.0, 352.0)))
-quad_tree.set_rect(pg.FRect((0.0, 0.0), (640.0, 352.0)))
+# # Adjusted size to fit the largest room, 640, 352, 2 by 2 room tu
+# quad_tree = QuadTree(
+#     pg.FRect((0.0, 0.0), (640.0, 352.0)))
+# quad_tree.set_rect(pg.FRect((0.0, 0.0), (640.0, 352.0)))
 
 # 1000 things in 1000 by 1000 room size (bullets, enemies, butterfly, whatever)
 # Actor size ranging from 0 - 32, actors should not be bigger than this in my game
 
-# speed = 1000
-speed = 10
+speed = 1000
+# speed = 10
 total_actors = []
-# total_actors_len = 1000000
-total_actors_len = 1000
+total_actors_len = 1000000
+# total_actors_len = 1000
 for i in range(total_actors_len):
-    # Init actor pos and size within level boundaries
-    pos = (random.uniform(0.0, 640.0), random.uniform(
-        0.0, 352.0))  # Adjusted to fit level size
-    size = (random.uniform(0.1, 32.0), random.uniform(0.1, 32.0))
-
     # # Init actor pos and size within level boundaries
-    # pos = (random.uniform(0.0, 100000.0),
-    #        random.uniform(0.0, 100000.0))
-    # size = (random.uniform(0.1, 100.0), random.uniform(0.1, 100.0))
+    # pos = (random.uniform(0.0, 640.0), random.uniform(
+    #     0.0, 352.0))  # Adjusted to fit level size
+    # size = (random.uniform(0.1, 32.0), random.uniform(0.1, 32.0))
+
+    # Init actor pos and size within level boundaries
+    pos = (random.uniform(0.0, 100000.0),
+           random.uniform(0.0, 100000.0))
+    size = (random.uniform(0.1, 100.0), random.uniform(0.1, 100.0))
 
     # Instance random rect
     actor_rect = pg.FRect((pos), (size))
@@ -283,11 +290,11 @@ while 1:
     dt = CLOCK.tick(FPS)
 
     # For timing test
-    tot_dt += dt
-    if tot_dt > 10000:
-        print(f'average: {tot_duration / tot_iter}')
-        pg.quit()
-        exit()
+    # tot_dt += dt
+    # if tot_dt > 10000:
+    #     print(f'average: {tot_duration / tot_iter}')
+    #     pg.quit()
+    #     exit()
 
     # Get event
     for event in pg.event.get(EVENTS):
@@ -330,6 +337,24 @@ while 1:
 
         found_actors = 0
 
+        # # Move ALL quad actors regardless of position or whatever
+        # for actor in all_quad_actors:
+        #     # Update pos with velocity that is in view
+        #     actor.rect.x += actor.velocity[0] * dt
+        #     actor.rect.y += actor.velocity[1] * dt
+
+        #     # Bounce off inner room walls
+        #     if actor.rect.left < room_rect.left or actor.rect.right > room_rect.right:
+        #         actor.rect.x -= actor.velocity[0] * dt
+        #         actor.velocity[0] *= -1
+
+        #     if actor.rect.top < room_rect.top or actor.rect.bottom > room_rect.bottom:
+        #         actor.rect.y -= actor.velocity[1] * dt
+        #         actor.velocity[1] *= -1
+
+        #     # Relocate actor in quadtree
+        #     quad_tree.relocate(actor)
+
         # Use quadtree to find nearby actors to my camera
         for actor in quad_tree.search(cam):
             # pos, size = actor
@@ -338,21 +363,21 @@ while 1:
             pg.draw.rect(NATIVE_SURF, "red",
                          ((x, y), (actor.rect.width, actor.rect.height)), 1)
 
-            # Update pos with velocity that is in view
-            actor.rect.x += actor.velocity[0] * dt
-            actor.rect.y += actor.velocity[1] * dt
+            # # Update pos with velocity that is in view
+            # actor.rect.x += actor.velocity[0] * dt
+            # actor.rect.y += actor.velocity[1] * dt
 
-            # Bounce off inner room walls
-            if actor.rect.left < room_rect.left or actor.rect.right > room_rect.right:
-                actor.rect.x -= actor.velocity[0] * dt
-                actor.velocity[0] *= -1
+            # # Bounce off inner room walls
+            # if actor.rect.left < room_rect.left or actor.rect.right > room_rect.right:
+            #     actor.rect.x -= actor.velocity[0] * dt
+            #     actor.velocity[0] *= -1
 
-            if actor.rect.top < room_rect.top or actor.rect.bottom > room_rect.bottom:
-                actor.rect.y -= actor.velocity[1] * dt
-                actor.velocity[1] *= -1
+            # if actor.rect.top < room_rect.top or actor.rect.bottom > room_rect.bottom:
+            #     actor.rect.y -= actor.velocity[1] * dt
+            #     actor.velocity[1] *= -1
 
-            # Relocate actor in quadtree
-            quad_tree.relocate(actor)
+            # # Relocate actor in quadtree
+            # quad_tree.relocate(actor)
 
             found_actors += 1
 
@@ -381,6 +406,21 @@ while 1:
 
         found_actors = 0
 
+        # # Move ALL actors regardless of position or whatever
+        # for actor in total_actors:
+        #     # Update pos with velocity that is in view
+        #     actor.rect.x += actor.velocity[0] * dt
+        #     actor.rect.y += actor.velocity[1] * dt
+
+        #     # Bounce off inner room walls
+        #     if actor.rect.left < room_rect.left or actor.rect.right > room_rect.right:
+        #         actor.rect.x -= actor.velocity[0] * dt
+        #         actor.velocity[0] *= -1
+
+        #     if actor.rect.top < room_rect.top or actor.rect.bottom > room_rect.bottom:
+        #         actor.rect.y -= actor.velocity[1] * dt
+        #         actor.velocity[1] *= -1
+
         # Naive check each one to cam collide, if collide then draw
         for actor in total_actors:
             if actor.rect.colliderect(cam):
@@ -390,18 +430,18 @@ while 1:
                 h = actor.rect.height
                 pg.draw.rect(NATIVE_SURF, "green", (x, y, w, h), 1)
 
-                # Update pos with velocity that is in view
-                actor.rect.x += actor.velocity[0] * dt
-                actor.rect.y += actor.velocity[1] * dt
+                # # Update pos with velocity that is in view
+                # actor.rect.x += actor.velocity[0] * dt
+                # actor.rect.y += actor.velocity[1] * dt
 
-                # Bounce off inner room walls
-                if actor.rect.left < room_rect.left or actor.rect.right > room_rect.right:
-                    actor.rect.x -= actor.velocity[0] * dt
-                    actor.velocity[0] *= -1
+                # # Bounce off inner room walls
+                # if actor.rect.left < room_rect.left or actor.rect.right > room_rect.right:
+                #     actor.rect.x -= actor.velocity[0] * dt
+                #     actor.velocity[0] *= -1
 
-                if actor.rect.top < room_rect.top or actor.rect.bottom > room_rect.bottom:
-                    actor.rect.y -= actor.velocity[1] * dt
-                    actor.velocity[1] *= -1
+                # if actor.rect.top < room_rect.top or actor.rect.bottom > room_rect.bottom:
+                #     actor.rect.y -= actor.velocity[1] * dt
+                #     actor.velocity[1] *= -1
 
                 found_actors += 1
 

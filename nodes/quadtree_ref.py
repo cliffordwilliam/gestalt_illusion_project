@@ -145,27 +145,18 @@ class QuadTree:
 
 
 # Quadtree init, as big as biggest room
-# quad_tree = QuadTree(
-#     pg.FRect((0.0, 0.0), (100000.0, 100000.0)))
-
 quad_tree = QuadTree(
-    # Adjusted size to fit the largest level
-    pg.FRect((0.0, 0.0), (400.0, 200.0)))
+    pg.FRect((0.0, 0.0), (100000.0, 100000.0)))
 
 
 # 1000000 things in 1000000 by 1000000 room size (bullets, enemies, butterfly, whatever)
 # Actor size ranging from 0 - 100
 total_actors_rect = []
-total_actors_len = 1000
+total_actors_len = 100000
 for _ in range(total_actors_len):
     # Init actor pos and size within level boundaries
-    # pos = (random.uniform(0.0, 100000.0),
-    #        random.uniform(0.0, 100000.0))
-    # size = (random.uniform(0.1, 100.0), random.uniform(0.1, 100.0))
-
-    # Init actor pos and size within level boundaries
-    pos = (random.uniform(0.0, 320.0), random.uniform(
-        0.0, 176.0))  # Adjusted to fit level size
+    pos = (random.uniform(0.0, 100000.0),
+           random.uniform(0.0, 100000.0))
     size = (random.uniform(0.1, 100.0), random.uniform(0.1, 100.0))
 
     # Instance random rect
