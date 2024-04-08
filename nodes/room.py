@@ -258,10 +258,8 @@ class Room:
         # endregion Draw bg_draw_update_layers (some bg sprites are classes, fire, water)
 
         # region Draw actors
-        # TODO: Instead of iterating over each one, use quadtree
         for actor in self.actor_layer:
-            if (a.camera.rect.x - actor.rect.width <= actor.rect.x < a.camera.rect.right) and (a.camera.rect.y - actor.rect.height <= actor.rect.y < a.camera.rect.bottom):
-                # Tell them to draw themselves
+            if a.camera.rect.colliderect(actor.rect):
                 actor.draw()
         # endregion Draw actors
 
@@ -379,9 +377,7 @@ class Room:
         # endregion Update all bg sprites (some bg sprites are classes, fire, water)
 
         # region Update actors
-        # TODO: Instead of iterating over each one, use quadtree
         for actor in self.actor_layer:
-            if (a.camera.rect.x - actor.rect.width <= actor.rect.x < a.camera.rect.right) and (a.camera.rect.y - actor.rect.height <= actor.rect.y < a.camera.rect.bottom):
-                # Tell them to draw themselves
+            if a.camera.rect.colliderect(actor.rect):
                 actor.update(dt)
         # endregion Update actors
