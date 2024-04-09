@@ -88,7 +88,7 @@ class Room:
         a.actor_to_quad = {}
 
         # Quadtree init, as big as current room, FRect because kid size might be decimal
-        self.quad_tree = QuadTree(pg.FRect(self.rect))
+        a.quad_tree = QuadTree(pg.FRect(self.rect))
 
         # region Turn dict to actual instances actors
         for i in range(len(self.actor_layer)):
@@ -102,7 +102,7 @@ class Room:
             self.actor_layer[i] = instance
 
             # Collect actor to the quadtree
-            self.quad_tree.insert(instance)
+            a.quad_tree.insert(instance)
         # endregion Turn dict to actual instances actors
 
     def set_name(self, name):
@@ -170,7 +170,7 @@ class Room:
         a.actor_to_quad = {}
 
         # Quadtree resize, as big as current room, FRect because kid size might be decimal
-        self.quad_tree.set_rect(pg.FRect(self.rect))
+        a.quad_tree.set_rect(pg.FRect(self.rect))
 
         # region Turn dict to actual instances actors
         for i in range(len(self.actor_layer)):
@@ -180,8 +180,9 @@ class Room:
             instance.rect.y = obj["yds"]
             instance.rect.y -= instance.rect.height - TILE_S
             self.actor_layer[i] = instance
+
             # Collect actor to the quadtree
-            self.quad_tree.insert(instance)
+            a.quad_tree.insert(instance)
         # endregion Turn dict to actual instances actors
 
     def draw_bg(self):
@@ -278,7 +279,7 @@ class Room:
         # endregion Draw bg_draw_update_layers (some bg sprites are classes, fire, water)
 
         # region Draw actors in camera
-        for actor in self.quad_tree.search(a.camera.rect):
+        for actor in a.quad_tree.search(a.camera.rect):
             actor.draw()
         #  endregion Draw actors in camera
 
@@ -396,13 +397,13 @@ class Room:
         # endregion Update all bg sprites (some bg sprites are classes, fire, water)
 
         # region Update actors in camera
-        for actor in self.quad_tree.search(a.camera.rect):
+        for actor in a.quad_tree.search(a.camera.rect):
             actor.update(dt)
 
             # Relocate actor in quadtree
-            self.quad_tree.relocate(actor)
+            a.quad_tree.relocate(actor)
         # endregion Update actors in camera
 
         # Debug draw the quadtree
         if a.game.is_debug:
-            self.quad_tree.draw()
+            a.quad_tree.draw()
