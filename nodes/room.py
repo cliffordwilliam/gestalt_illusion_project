@@ -1,5 +1,6 @@
 from constants import *
 import autoload as a
+from nodes.quadtree import QuadTree
 
 
 class Room:
@@ -83,14 +84,25 @@ class Room:
                         self.bg_draw_update_layers[i][j] = {
                             "name": "actor", "obj": actor}
 
+        # Quadtree init, as big as current room, FRect because kid size might be decimal
+        self.quad_tree = QuadTree(pg.FRect(self.rect))
+
         # region Turn dict to actual instances actors
         for i in range(len(self.actor_layer)):
             obj = self.actor_layer[i]
-            instance = a.game.actors[obj["name"]]()
+
+            # TODO: use UUID instaead of index later
+            instance = a.game.actors[obj["name"]](i)
             instance.rect.x = obj["xds"]
             instance.rect.y = obj["yds"]
             instance.rect.y -= instance.rect.height - TILE_S
             self.actor_layer[i] = instance
+
+            # Reset the book
+            a.actor_to_quad = {}
+
+            # Collect actor to the quadtree
+            self.quad_tree.insert(instance)
         # endregion Turn dict to actual instances actors
 
     def set_name(self, name):
@@ -154,14 +166,23 @@ class Room:
                         self.bg_draw_update_layers[i][j] = {
                             "name": "actor", "obj": actor}
 
+        # Quadtree resize, as big as current room, FRect because kid size might be decimal
+        self.quad_tree.set_rect(pg.FRect(self.rect))
+
         # region Turn dict to actual instances actors
         for i in range(len(self.actor_layer)):
             obj = self.actor_layer[i]
-            instance = a.game.actors[obj["name"]]()
+            instance = a.game.actors[obj["name"]](i)
             instance.rect.x = obj["xds"]
             instance.rect.y = obj["yds"]
             instance.rect.y -= instance.rect.height - TILE_S
             self.actor_layer[i] = instance
+
+            # Reset the book
+            a.actor_to_quad = {}
+
+            # Collect actor to the quadtree
+            self.quad_tree.insert(instance)
         # endregion Turn dict to actual instances actors
 
     def draw_bg(self):
@@ -257,11 +278,10 @@ class Room:
                                              (item_xd, item_yd), item["region"])
         # endregion Draw bg_draw_update_layers (some bg sprites are classes, fire, water)
 
-        # region Draw actors
-        for actor in self.actor_layer:
-            if a.camera.rect.colliderect(actor.rect):
-                actor.draw()
-        # endregion Draw actors
+        # region Draw actors in camera
+        for actor in self.quad_tree.search(a.camera.rect):
+            actor.draw()
+        #  endregion Draw actors in camera
 
     def draw_fg(self):
         # Camera not ready? return
@@ -376,8 +396,14 @@ class Room:
                                 continue
         # endregion Update all bg sprites (some bg sprites are classes, fire, water)
 
-        # region Update actors
-        for actor in self.actor_layer:
-            if a.camera.rect.colliderect(actor.rect):
-                actor.update(dt)
-        # endregion Update actors
+        # region Update actors in camera
+        for actor in self.quad_tree.search(a.camera.rect):
+            actor.update(dt)
+
+            # Relocate actor in quadtree
+            self.quad_tree.relocate(actor)
+        # endregion Update actors in camera
+
+        # Debug draw the quadtree
+        if a.game.is_debug:
+            self.quad_tree.draw()

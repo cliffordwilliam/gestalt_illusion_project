@@ -69,3 +69,6 @@ FONT = font.Font(
     FONT_DATA["path"],
     FONT_H,
 )
+
+# The quad layers limit, 8 levels depth
+MAX_QUADTREE_DEPTH = 8

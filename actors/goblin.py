@@ -6,7 +6,10 @@ import autoload as a
 
 
 class Goblin:
-    def __init__(self):
+    def __init__(self, id):
+        # UUID for quadtree bookeeping, all actors need this
+        self.id = id
+
         # Name
         self.name = "Goblin"
 
