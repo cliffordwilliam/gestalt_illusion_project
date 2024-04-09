@@ -353,7 +353,6 @@ class Room:
         # endregion all fg sprites
 
     def update(self, dt):
-        print(a.actor_to_quad)
         # Camera not ready? return
         if a.camera == None:
             return
