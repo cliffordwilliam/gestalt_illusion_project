@@ -84,6 +84,9 @@ class Room:
                         self.bg_draw_update_layers[i][j] = {
                             "name": "actor", "obj": actor}
 
+        # Reset the book
+        a.actor_to_quad = {}
+
         # Quadtree init, as big as current room, FRect because kid size might be decimal
         self.quad_tree = QuadTree(pg.FRect(self.rect))
 
@@ -97,9 +100,6 @@ class Room:
             instance.rect.y = obj["yds"]
             instance.rect.y -= instance.rect.height - TILE_S
             self.actor_layer[i] = instance
-
-            # Reset the book
-            a.actor_to_quad = {}
 
             # Collect actor to the quadtree
             self.quad_tree.insert(instance)
@@ -166,6 +166,9 @@ class Room:
                         self.bg_draw_update_layers[i][j] = {
                             "name": "actor", "obj": actor}
 
+        # Reset the book
+        a.actor_to_quad = {}
+
         # Quadtree resize, as big as current room, FRect because kid size might be decimal
         self.quad_tree.set_rect(pg.FRect(self.rect))
 
@@ -177,10 +180,6 @@ class Room:
             instance.rect.y = obj["yds"]
             instance.rect.y -= instance.rect.height - TILE_S
             self.actor_layer[i] = instance
-
-            # Reset the book
-            a.actor_to_quad = {}
-
             # Collect actor to the quadtree
             self.quad_tree.insert(instance)
         # endregion Turn dict to actual instances actors
@@ -354,6 +353,7 @@ class Room:
         # endregion all fg sprites
 
     def update(self, dt):
+        print(a.actor_to_quad)
         # Camera not ready? return
         if a.camera == None:
             return
