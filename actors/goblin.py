@@ -216,8 +216,10 @@ class Goblin:
         # Update hit rect to follow rect, depends on my sprite sheet
         if self.current_sprite_sheet == self.sprite_sheet:
             self.hit_rect.midleft = self.rect.center
+            self.hit_rect.y -= TILE_S
         elif self.current_sprite_sheet == self.sprite_sheet_flip:
             self.hit_rect.midright = self.rect.center
+            self.hit_rect.y -= TILE_S
 
         # Idle
         if self.state == "idle":
@@ -294,7 +296,12 @@ class Goblin:
                 if self.hit_rect.colliderect(a.player):
                     # Call player hurt callback
                     # TODO: Pass my damage data
-                    a.player.ouch()
+
+                    # Player on left or right? Positive rel_player_pos = right
+                    rel_player_pos = a.player.rect.center[0] - \
+                        self.rect.center[0]
+                    pain_direction_from = -1 if rel_player_pos < 0 else 1
+                    a.player.ouch(pain_direction_from)
 
     # Set state
     def set_state(self, value):
