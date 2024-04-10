@@ -89,6 +89,11 @@ class World:
         # endregion Adjust player and camera to new room position
 
     def event(self, event):
+        # Prioritize pause event
+        if event.type == pg.KEYUP:
+            if event.key == a.game.key_bindings["pause"]:
+                a.mini_map.set_state("inventory")
+
         # Player event
         a.player.event(event)
 

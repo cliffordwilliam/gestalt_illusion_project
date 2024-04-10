@@ -108,10 +108,19 @@ class Room:
         # Add player to quad tree in front of everyone, so that it will drawn in front
         a.quad_tree.insert(a.player)
 
+        doors_pos = []
+        for cell in self.collision_layer:
+            if cell != 0:
+                if cell["type"] == "Door":
+                    xtu = cell["xds"] // TILE_S
+                    ytu = cell["yds"] // TILE_S
+                    doors_pos.append({"xtu": xtu, "ytu": ytu})
+
         # Pack data for mini map
         mini_map_data = {
             "name": self.name,
-            "rect": [self.x_tu, self.y_tu, self.w_tu, self.h_tu]
+            "rect": [self.x_tu, self.y_tu, self.w_tu, self.h_tu],
+            "doors_pos": doors_pos
         }
 
         # Pass data to mini map to be drawn
@@ -200,10 +209,19 @@ class Room:
         # Add player to quad tree in front of everyone, so that it will drawn in front
         a.quad_tree.insert(a.player)
 
+        doors_pos = []
+        for cell in self.collision_layer:
+            if cell != 0:
+                if cell["type"] == "Door":
+                    xtu = cell["xds"] // TILE_S
+                    ytu = cell["yds"] // TILE_S
+                    doors_pos.append({"xtu": xtu, "ytu": ytu})
+
         # Pack data for mini map
         mini_map_data = {
             "name": self.name,
-            "rect": [self.x_tu, self.y_tu, self.w_tu, self.h_tu]
+            "rect": [self.x_tu, self.y_tu, self.w_tu, self.h_tu],
+            "doors_pos": doors_pos
         }
 
         # Pass data to mini map to be drawn
