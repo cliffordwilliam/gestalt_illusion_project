@@ -123,7 +123,8 @@ class World:
             a.player.event(event)
 
         elif self.state == "transition":
-            pass
+            # Player event
+            a.player.event(event)
 
         elif self.state == "pause":
             # Not allowed, return
