@@ -108,6 +108,15 @@ class Room:
         # Add player to quad tree in front of everyone, so that it will drawn in front
         a.quad_tree.insert(a.player)
 
+        # Pack data for mini map
+        mini_map_data = {
+            "name": self.name,
+            "rect": [self.x_tu, self.y_tu, self.w_tu, self.h_tu]
+        }
+
+        # Pass data to mini map to be drawn
+        a.mini_map.add_room(mini_map_data)
+
     def set_name(self, name):
         # Get new room name
         self.name = name
@@ -190,6 +199,15 @@ class Room:
 
         # Add player to quad tree in front of everyone, so that it will drawn in front
         a.quad_tree.insert(a.player)
+
+        # Pack data for mini map
+        mini_map_data = {
+            "name": self.name,
+            "rect": [self.x_tu, self.y_tu, self.w_tu, self.h_tu]
+        }
+
+        # Pass data to mini map to be drawn
+        a.mini_map.add_room(mini_map_data)
 
     def draw(self):
         # Camera not ready? return

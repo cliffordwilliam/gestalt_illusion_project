@@ -3,13 +3,15 @@ import autoload as a
 from nodes.camera import Camera
 from nodes.room import Room
 from actors.player import Player
-from actors.goblin import Goblin
 from nodes.curtain import Curtain
+from nodes.mini_map import MiniMap
 
 
 class World:
     def __init__(self):
         a.world = self
+
+        a.mini_map = MiniMap()
 
         a.player = Player()
         a.player.rect.x = 32
@@ -96,6 +98,9 @@ class World:
 
         # Draw player is done in room with other moving actors in draw bg and non moving actors
         a.room.draw()
+
+        # Draw the mini map
+        a.mini_map.draw()
 
         # Draw curtain
         self.transition_curtain.draw()
