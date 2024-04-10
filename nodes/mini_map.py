@@ -16,6 +16,7 @@ class MiniMap:
     def __init__(self):
         # TODO: Read save data and populate my rooms
         # TODO: Add doors, render door as black to cut off the room white border
+        # TODO: Add slide anim when inventory mode transition happen
         self.rooms = []
         self.visited_rooms = set()
 
@@ -169,8 +170,8 @@ class MiniMap:
                          (self.x, self.y, self.w, self.h), 1)
 
             # Inventory mode draw player rel to center offset
-            player_x_tu = player_x_tu // TILE_S + self.offset_x
-            player_y_tu = player_y_tu // TILE_S + self.offset_y
+            player_x_tu = a.player.rect.center[0] // TILE_S + self.offset_x
+            player_y_tu = a.player.rect.center[1] // TILE_S + self.offset_y
             pg.draw.rect(NATIVE_SURF, "red", (player_x_tu, player_y_tu, 2, 2))
 
         # In inventory mode, no player offset
@@ -235,16 +236,3 @@ class MiniMap:
             # Draw center - represent player
             pg.draw.rect(NATIVE_SURF, "red",
                          (self.offset_x_1, self.offset_y_1, 2, 2))
-
-        # # Normal gameplay
-        # if not self.state == "gameplay":
-        #     # Draw center - represent player
-        #     pg.draw.rect(NATIVE_SURF, "red",
-        #                  (self.offset_x_1, self.offset_y_1, 2, 2))
-
-        # # Inventory mode
-        # else:
-        #     # Inventory mode draw player rel to center offset
-        #     player_x_tu = player_x_tu // TILE_S + self.offset_x
-        #     player_y_tu = player_y_tu // TILE_S + self.offset_y
-        #     pg.draw.rect(NATIVE_SURF, "red", (player_x_tu, player_y_tu, 2, 2))

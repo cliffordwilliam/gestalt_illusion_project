@@ -15,9 +15,12 @@ class Curtain:
         4: Timer can go from 0 to 255 or 255 to 0 based on direction, update direction to go wherever you want
     '''
 
-    def __init__(self, duration, start="empty"):
+    def __init__(self, duration, start="empty", max_alpha=255):
         # Empty or full
         self.start = start
+
+        # Max alpha
+        self.max_alpha = max_alpha
 
         # Curtain init
         self.curtain = pg.Surface((NATIVE_W, NATIVE_H))
@@ -32,8 +35,8 @@ class Curtain:
 
         # Start full
         if self.start == "full":
-            self.curtain.set_alpha(255)
-            self.alpha = 255
+            self.curtain.set_alpha(self.max_alpha)
+            self.alpha = self.max_alpha
             self.fade_duration = duration
             self.fade_timer = self.fade_duration
             self.direction = -1
@@ -58,8 +61,8 @@ class Curtain:
 
         # Start full
         if self.start == "full":
-            self.curtain.set_alpha(255)
-            self.alpha = 255
+            self.curtain.set_alpha(self.max_alpha)
+            self.alpha = self.max_alpha
             self.fade_timer = self.fade_duration
             self.direction = -1
             self.remainder = 0
@@ -81,21 +84,21 @@ class Curtain:
         # Clamp timer
         self.fade_timer = max(
             0, min(self.fade_duration, self.fade_timer))
-        
+
         # Use timer as position
         fraction = self.fade_timer / self.fade_duration
 
         # Use position to update alpha value
-        lerp_alpha = pg.math.lerp(0, 255, fraction)
+        lerp_alpha = pg.math.lerp(0, self.max_alpha, fraction)
 
         # Add prev round float loss
         lerp_alpha += self.remainder
         # Round to int
-        self.alpha = max(0, min(255, round(lerp_alpha)))
+        self.alpha = max(0, min(self.max_alpha, round(lerp_alpha)))
 
         # Collect round loss
         self.remainder = lerp_alpha - self.alpha
-        
+
         # Set alpha
         self.curtain.set_alpha(self.alpha)
 
@@ -104,7 +107,7 @@ class Curtain:
             for callback in self.listener_empty_ends:
                 callback()
 
-        # Filled end reached - 255 - pitch black?
+        # Filled end reached - self.max_alpha - pitch black?
         if self.fade_timer == self.fade_duration:
             for callback in self.listener_full_ends:
                 callback()
