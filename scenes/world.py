@@ -9,15 +9,15 @@ from nodes.curtain import Curtain
 
 class World:
     def __init__(self):
-        a.room = Room("stage0_gym_small_game.json")
-
-        a.camera = Camera()
-
         a.world = self
 
         a.player = Player()
         a.player.rect.x = 32
         a.player.rect.bottom = 144
+
+        a.room = Room("stage0_gym_small_game.json")
+
+        a.camera = Camera()
 
         a.camera.set_target(a.player)
 
@@ -94,32 +94,21 @@ class World:
         # Fill native surface color to have good contrast for player
         NATIVE_SURF.fill("#6bc5a0")
 
-        # Draw bg
-        a.room.draw_bg()
-
-        # Draw player
-        a.player.draw()
-
-        # Draw fg
-        a.room.draw_fg()
+        # Draw player is done in room with other moving actors in draw bg and non moving actors
+        a.room.draw()
 
         # Draw curtain
         self.transition_curtain.draw()
 
-        if a.game.is_debug:
-            FONT.render_to(DEBUG_SURF, (0, 0),
-                           f'fps: {int(CLOCK.get_fps())}', "white", "black")
-
     def update(self, dt):
         if self.state == "Playing":
-            # Update player
-            a.player.update(dt)
+            # Update player is done in room with other moving actors
 
-            # Update camera
-            a.camera.update(dt)
-
-            # Update all bg sprites actors
+            # Update all bg sprites actors, and moving actors
             a.room.update(dt)
+
+            # Update camera (must be here, after its target actor moved)
+            a.camera.update(dt)
 
         elif self.state == "Transition":
             # On transition state, immediately update transition curtain

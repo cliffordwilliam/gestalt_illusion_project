@@ -101,6 +101,11 @@ while 1:
     # Current scene update
     a.game.current_scene.update(dt)
 
+    # Sometimes the update method has debug draw, so make sure fps is on top all things
+    if a.game.is_debug:
+        FONT.render_to(DEBUG_SURF, (0, 0),
+                       f'fps: {int(CLOCK.get_fps())}', "white", "black")
+
     # region Draw debug surface on native
     if a.game.is_debug == True:
         NATIVE_SURF.blit(DEBUG_SURF, (0, 0))

@@ -42,11 +42,15 @@ class Animator:
         self.duration = self.frame_data["duration"]
         # endregion frame data
 
+        # Callbacks
+        self.listener_end = []
+
+    def add_event_listener(self, value, event):
+        if event == "animation_end":
+            self.listener_end.append(value)
+
     def set_current_animation(self, value):
-        # region Return if new anim is same as current
-        if self.current_animation == value:
-            return
-        # endregion Return if new anim is same as current
+        # Calling the same animation name when it is playing will reset it to start
 
         # region current animation data
         self.current_animation = value
@@ -77,8 +81,13 @@ class Animator:
 
                 # Didn't loop, this anim has transition animation?
                 if self.next_animation != 0:
-                    # Play next anim
+                    # Play next anim, do not call animation end callback
                     self.set_current_animation(self.next_animation)
+                    return
+
+                # Call animation end callback
+                for callback in self.listener_end:
+                    callback()
 
                 # If staying on last frame no need to update data
                 return

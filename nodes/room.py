@@ -105,6 +105,9 @@ class Room:
             a.quad_tree.insert(instance)
         # endregion Turn dict to actual instances actors
 
+        # Add player to quad tree in front of everyone, so that it will drawn in front
+        a.quad_tree.insert(a.player)
+
     def set_name(self, name):
         # Get new room name
         self.name = name
@@ -185,7 +188,10 @@ class Room:
             a.quad_tree.insert(instance)
         # endregion Turn dict to actual instances actors
 
-    def draw_bg(self):
+        # Add player to quad tree in front of everyone, so that it will drawn in front
+        a.quad_tree.insert(a.player)
+
+    def draw(self):
         # Camera not ready? return
         if a.camera == None:
             return
@@ -282,24 +288,6 @@ class Room:
         for actor in a.quad_tree.search(a.camera.rect):
             actor.draw()
         #  endregion Draw actors in camera
-
-    def draw_fg(self):
-        # Camera not ready? return
-        if a.camera == None:
-            return
-
-        # region Draw all collision sprites
-        # Unpack cam position tl
-        cam_x = a.camera.rect.x
-        cam_y = a.camera.rect.y
-
-        # Turn coord into tu
-        cam_x_tu = cam_x // TILE_S
-        cam_y_tu = cam_y // TILE_S
-
-        # Turn tu into index, by sub cam offset
-        cam_x_tu = int(cam_x_tu - self.x_tu)
-        cam_y_tu = int(cam_y_tu - self.y_tu)
 
         # Iterate over rows
         for row in range(12):
@@ -400,8 +388,7 @@ class Room:
         for actor in a.quad_tree.search(a.camera.rect):
             actor.update(dt)
 
-            # Relocate actor in quadtree
-            a.quad_tree.relocate(actor)
+            # Relocate actor in quadtree done by kinematic, reloc only when their pos changed
         # endregion Update actors in camera
 
         # Debug draw the quadtree

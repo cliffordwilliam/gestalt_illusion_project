@@ -18,11 +18,11 @@ class Timer:
         self.duration = duration
 
         # Callbacks
-        self.listener_stop = []
+        self.listener_end = []
 
     def add_event_listener(self, value, event):
         if event == "timer_end":
-            self.listener_stop.append(value)
+            self.listener_end.append(value)
 
     def reset(self):
         self.timer = 0
@@ -31,5 +31,5 @@ class Timer:
         self.timer += dt
         if self.timer > self.duration:
             self.timer = 0
-            for callback in self.listener_stop:
+            for callback in self.listener_end:
                 callback()

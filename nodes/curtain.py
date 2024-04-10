@@ -77,19 +77,25 @@ class Curtain:
     def update(self, dt):
         # Update timer with direction and dt, go left or right
         self.fade_timer += dt * self.direction
+
         # Clamp timer
         self.fade_timer = max(
             0, min(self.fade_duration, self.fade_timer))
+        
         # Use timer as position
         fraction = self.fade_timer / self.fade_duration
+
         # Use position to update alpha value
         lerp_alpha = pg.math.lerp(0, 255, fraction)
+
         # Add prev round float loss
         lerp_alpha += self.remainder
         # Round to int
         self.alpha = max(0, min(255, round(lerp_alpha)))
+
         # Collect round loss
         self.remainder = lerp_alpha - self.alpha
+        
         # Set alpha
         self.curtain.set_alpha(self.alpha)
 

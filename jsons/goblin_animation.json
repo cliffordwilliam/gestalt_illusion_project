@@ -42,5 +42,35 @@
         "duration": 100
       }
     ]
+  },
+  "attack": {
+    "is_loop": 0,
+    "next_animation": 0,
+    "frames_list": [
+      {
+        "region": [240, 80, 80, 80],
+        "duration": 100
+      },
+      {
+        "region": [0, 160, 80, 80],
+        "duration": 100
+      },
+      {
+        "region": [80, 160, 80, 80],
+        "duration": 100
+      },
+      {
+        "region": [160, 160, 80, 80],
+        "duration": 100
+      },
+      {
+        "region": [240, 160, 80, 80],
+        "duration": 100
+      },
+      {
+        "region": [0, 240, 80, 80],
+        "duration": 100
+      }
+    ]
   }
 }

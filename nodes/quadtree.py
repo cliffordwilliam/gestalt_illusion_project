@@ -3,8 +3,28 @@ import autoload as a
 
 
 class QuadTree:
+    '''
+    How to use: 
+        1: This thing works in tandem with room. You use this to find moving actors eg. (for actor in a.quad_tree.search(a.camera.rect)) or (if a.player in a.quad_tree.search(self.aggro_rect):)
+        2: In room, create this and pass the room size, this will be the quad root size
+        3: Room instances actors with its json data, for each instance add it to quadtree with its insert method
+        4: Do 2 and 3 again when room is changed, but this time use the set_rect setter to resize the quadtree
+        5: Since room controls the drawing layer of bg, actor and fg. Use the quadtree search func to find actors in cam and call their draw method
+        6: Do the same with 5 but tell actor to update instead
+        7: If you used search and found actors, then you want to delete them? Use the remove actor method
+        8: If actors move, call the relocate and pass the moved actor right after you have updated its position
+        9: Usually you dedicate 1 quadtree for 1 thing. Maybe 1 for bush and another for bugs, where you will use a rect and use each of their search func
+
+    What will happen: 
+        1: Quadtree will check if inserted actor is fully inside its kid, if it is it will create a new kid. This is repeated for this kid again recursively max is 8 times.
+        2: The search func iterates over the kids, see which one has their actors collide with the given rect
+        3: Each kid have total actors, these are actors that is fully inside the kids rect
+        4: If the search given rect fully encompasses a kid, all of that kid actor will be dumped to output
+        5: Removing actor is fast as it uses book keeping autoload
+    '''
+
     def __init__(self, rect, nDepth=0):
-        # Keeps track of my depth level
+        # Keeps track of my depth level, limit with max constant
         self.depth = nDepth
 
         # My rect, to check if actor is inside or not
@@ -53,7 +73,7 @@ class QuadTree:
         # Clear actor
         self.actors.clear()
 
-        # Tell children to clear and empty themselves
+        # Tell children to clear and empty themselves to None
         for i in range(4):
             if self.kids[i]:
                 self.kids[i].clear()
@@ -73,7 +93,8 @@ class QuadTree:
         for i in range(4):
             # Given actor is completely inside one of my kid?
             if self.kids_rects[i].contains(given_actor.rect):
-                # Still inside limit? Go to next depth / level deeper
+
+                # Still inside limit? Go to next depth / level deeper (insert actor to kid)
                 if self.depth + 1 < MAX_QUADTREE_DEPTH:
 
                     # No child
@@ -87,10 +108,10 @@ class QuadTree:
                     self.kids[i].insert(given_actor)
                     return
 
-        # Actors is not completely inside any kids? Then its mine
+        # Actors is not completely inside any of my kids? Then its mine
         self.actors.append(given_actor)
 
-        # Fill global book, store the mapping of actor to me
+        # Fill global book, store the mapping of actor id to me (section / quad / kid)
         a.actor_to_quad[given_actor.id] = self
 
     # Return actors list that overlap with given rect

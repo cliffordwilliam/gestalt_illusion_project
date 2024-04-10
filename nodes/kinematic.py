@@ -50,6 +50,8 @@ class Kinematic:
         if a.camera == None:
             return
 
+        old_owner_tl = self.owner.rect.topleft
+
         # Debug draw owner real rect
         if a.game.is_debug:
             xd = self.owner.rect.x - a.camera.rect.x
@@ -70,10 +72,6 @@ class Kinematic:
         if self.owner.velocity.y < 0:
             direction_y = -1
         # endregion Update direction sign for movement
-
-        # Actor not pushing against wall? Not on wall
-        if self.owner.direction == 0:
-            self.is_on_wall = False
 
         # region Update horizontal position
         # Distance to cover horizontally
@@ -394,7 +392,7 @@ class Kinematic:
                 # self.owner.rect.clamp_ip(a.camera.rect)
         # endregion Update vertical position
 
-        # region Handle walk against wall
-        if self.is_on_wall and self.is_on_floor:
-            self.owner.velocity.x = 0
-        # endregion Handle walk against wall
+        # region Did owner move? relocate them in quadtree ONLY if they are moving things that is not the player
+        if self.owner.rect.topleft != old_owner_tl:
+            a.quad_tree.relocate(self.owner)
+        # endregion Did owner move? relocate them in quadtree

@@ -6,6 +6,9 @@ import autoload as a
 
 class Player:
     def __init__(self):
+        # UUID for quadtree bookeeping, for quick relocation in quad
+        self.id = id
+
         # Name
         self.name = "Player"
 
@@ -76,6 +79,10 @@ class Player:
 
         # Set to false on next frame immediately after falling for 1 frame distance
         self.is_thin_fall = False
+
+    # Called by enemies to damage player
+    def ouch(self):
+        print("hit")
 
     # Called by kinematic - this is for static things
     def on_collide(self, cells):
@@ -178,16 +185,28 @@ class Player:
 
         # Debug draw states
         x = self.rect.x - a.camera.rect.x
-        y = self.rect.y - a.camera.rect.y - TILE_S
+        y = self.rect.y - a.camera.rect.y - FONT_H
         if a.game.is_debug:
             FONT.render_to(DEBUG_SURF, (x, y),
                            f'state: {self.state}', "white", "black")
 
         x = self.rect.x - a.camera.rect.x
-        y = self.rect.y - a.camera.rect.y - (2 * FONT_H)
+        y = self.rect.y - a.camera.rect.y - (2 * FONT_H) - 1
         if a.game.is_debug:
             FONT.render_to(DEBUG_SURF, (x, y),
                            f'face: {self.facing_direction}', "white", "black")
+
+        x = self.rect.x - a.camera.rect.x
+        y = self.rect.y - a.camera.rect.y - (3 * FONT_H) - 2
+        if a.game.is_debug:
+            FONT.render_to(DEBUG_SURF, (x, y),
+                           f'wall: {self.kinematic.is_on_wall}', "white", "black")
+
+        x = self.rect.x - a.camera.rect.x
+        y = self.rect.y - a.camera.rect.y - (4 * FONT_H) - 3
+        if a.game.is_debug:
+            FONT.render_to(DEBUG_SURF, (x, y),
+                           f'floor: {self.kinematic.is_on_floor}', "white", "black")
 
     def update(self, dt):
         # Game not ready? Return
