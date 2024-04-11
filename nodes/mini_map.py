@@ -15,8 +15,6 @@ class MiniMap:
 
     def __init__(self):
         # TODO: Read save data and populate my rooms
-        # TODO: Add doors, render door as black to cut off the room white border
-        # TODO: Add slide anim when inventory mode transition happen
         self.rooms = []
         self.visited_rooms = set()
 
@@ -46,6 +44,9 @@ class MiniMap:
 
         # Gameplay or menu mode
         self.state = "gameplay"
+
+        # Drawn once in inventory entry, avoid looping when player is not moving anyways why for loop
+        self.inventory_surface = pg.Surface((NATIVE_W, NATIVE_H))
 
     def set_state(self, value):
         # Update the is inventory
@@ -77,6 +78,9 @@ class MiniMap:
             self.b = self.y + self.h
 
         elif self.state == "inventory":
+            # Clear previous draw
+            self.inventory_surface.fill("black")
+
             # Inventory mode topleft
             self.x = TILE_S * 7
             self.y = TILE_S * 2
@@ -96,23 +100,7 @@ class MiniMap:
             self.r = self.x + self.w
             self.b = self.y + self.h
 
-    def add_room(self, data):
-        room_name = data["name"]
-
-        # This given room not added yet?
-        if room_name not in self.visited_rooms:
-            # Add it to list, to be drawn
-            self.rooms.append(data)
-
-            # Add it to set, to check, no dup
-            self.visited_rooms.add(room_name)
-
-    def draw(self, surf=NATIVE_SURF):
-        # Draw the mini map background
-        pg.draw.rect(surf, "black", (self.x, self.y, self.w, self.h))
-
-        # In inventory mode, no player offset
-        if self.state == "inventory":
+            # Draw on the inventory page
             player_x_tu = 0
             player_y_tu = 0
 
@@ -140,7 +128,7 @@ class MiniMap:
                 h = b - y
 
                 # Draw the room
-                pg.draw.rect(surf, "white", (x, y, w, h), 1)
+                pg.draw.rect(self.inventory_surface, "white", (x, y, w, h), 1)
 
                 # Get the doors
                 for door in data["doors_pos"]:
@@ -163,16 +151,37 @@ class MiniMap:
                     h = b - y
 
                     # Draw the door
-                    pg.draw.rect(surf, "black", (x, y, w, h), 1)
+                    pg.draw.rect(self.inventory_surface,
+                                 "black", (x, y, w, h), 1)
 
             # Draw the white frame
-            pg.draw.rect(surf, "white",
+            pg.draw.rect(self.inventory_surface, "white",
                          (self.x, self.y, self.w, self.h), 1)
 
             # Inventory mode draw player rel to center offset
             player_x_tu = a.player.rect.center[0] // TILE_S + self.offset_x
             player_y_tu = a.player.rect.center[1] // TILE_S + self.offset_y
-            pg.draw.rect(surf, "red", (player_x_tu, player_y_tu, 2, 2))
+            pg.draw.rect(self.inventory_surface, "red",
+                         (player_x_tu, player_y_tu, 2, 2))
+
+    def add_room(self, data):
+        room_name = data["name"]
+
+        # This given room not added yet?
+        if room_name not in self.visited_rooms:
+            # Add it to list, to be drawn
+            self.rooms.append(data)
+
+            # Add it to set, to check, no dup
+            self.visited_rooms.add(room_name)
+
+    def draw(self, surf=NATIVE_SURF):
+        # Draw the mini map background
+        pg.draw.rect(surf, "black", (self.x, self.y, self.w, self.h))
+
+        # In inventory mode, no player offset
+        if self.state == "inventory":
+            surf.blit(self.inventory_surface, (0, 0))
 
         # In inventory mode, no player offset
         elif self.state == "gameplay":

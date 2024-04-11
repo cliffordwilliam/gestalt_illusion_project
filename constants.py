@@ -64,7 +64,7 @@ DEBUG_RECT = DEBUG_SURF.get_rect()
 # Convenience global font for debug
 FONT_DATA = TTFS_DATA["cg_pixel_3x5_mono.ttf"]
 FONT_H = FONT_DATA["h"]
-FONT_w = FONT_DATA["w"]
+FONT_W = FONT_DATA["w"]
 FONT = font.Font(
     FONT_DATA["path"],
     FONT_H,

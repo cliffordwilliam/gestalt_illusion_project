@@ -49,6 +49,7 @@ class Curtain:
         self.listener_full_ends = []
 
     def flip_direction(self):
+        # self.is_callback_called = False
         self.direction *= -1
 
     def reset(self):
@@ -57,7 +58,6 @@ class Curtain:
         self.alpha = 0
         self.fade_timer = 0
         self.direction = 1
-        self.remainder = 0
 
         # Start full
         if self.start == "full":
@@ -65,7 +65,9 @@ class Curtain:
             self.alpha = self.max_alpha
             self.fade_timer = self.fade_duration
             self.direction = -1
-            self.remainder = 0
+
+        # Remainder and fade early flag
+        self.remainder = 0
 
     def add_event_listener(self, value, event):
         if event == "empty_end":
@@ -108,8 +110,6 @@ class Curtain:
                 callback()
 
         # Filled end reached - self.max_alpha - pitch black?
-        if self.fade_timer == self.fade_duration:
+        elif self.fade_timer == self.fade_duration:
             for callback in self.listener_full_ends:
                 callback()
-            pass
-        return

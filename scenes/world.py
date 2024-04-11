@@ -5,6 +5,7 @@ from nodes.room import Room
 from actors.player import Player
 from nodes.curtain import Curtain
 from nodes.mini_map import MiniMap
+from actors.inventory import Inventory
 
 
 class World:
@@ -23,6 +24,9 @@ class World:
 
         a.camera.set_target(a.player)
 
+        # This belongs to me only, no one talks to this
+        self.inventory = Inventory()
+
         # Curtain belongs to world, it needs to distinguish the callback
         self.transition_curtain = Curtain(50, "empty")
         self.transition_curtain.add_event_listener(
@@ -36,41 +40,15 @@ class World:
         # To remember which door after transition curtain
         self.next_door = None
 
-        # Inventory overlay
-        self.overlay_inventory_curtain = Curtain(80, "empty")
-        self.overlay_inventory_curtain.add_event_listener(
-            self.on_overlay_inventory_curtain_empty_end, "empty_end")
-        self.overlay_inventory_curtain.add_event_listener(
-            self.on_overlay_inventory_curtain_full_end, "full_end")
-
-        # Menu input
-        self.allow_inventory_input = False
-
-    def on_overlay_inventory_curtain_empty_end(self):
-        # Overlay curtain is gone? Set playing
-        self.state = "playing"
-
-        # Set map to gameplay
-        a.mini_map.set_state("gameplay")
-
-        # Reset overlay curtain
-        self.overlay_inventory_curtain.reset()
-
-    def on_overlay_inventory_curtain_full_end(self):
-        self.allow_inventory_input = True
-
     def on_player_hit_door(self, door):
-        # Only trigger once, player hit door -> transition state
-        if self.state == "playing":
+        # Only trigger once, do not call if alr in transition
+        if self.state != "transition":
             self.next_door = door
-            self.state = "transition"
+            self.set_state("transition")
 
     def on_transition_curtain_empty_end(self):
         # Return to playing state
-        self.state = "playing"
-
-        # Reset transition curtain
-        self.transition_curtain.reset()
+        self.set_state("playing")
 
     def on_transition_curtain_full_end(self):
         # Change room
@@ -113,11 +91,10 @@ class World:
 
     def event(self, event):
         if self.state == "playing":
-            # Prioritize pause event
+            # Prioritize pause event, exit to inventory state
             if event.type == pg.KEYUP:
                 if event.key == a.game.key_bindings["pause"]:
-                    self.state = "pause"
-                    a.mini_map.set_state("inventory")
+                    self.set_state("pause")
 
             # Player event
             a.player.event(event)
@@ -127,32 +104,15 @@ class World:
             a.player.event(event)
 
         elif self.state == "pause":
-            # Not allowed, return
-            if self.allow_inventory_input == False:
-                return
-
-            if event.type == pg.KEYUP:
-                # Pressed pause again in overlay?
-                if event.key == a.game.key_bindings["pause"]:
-                    # Remove player all inputs
-                    a.player.is_left_pressed = 0
-                    a.player.is_right_pressed = 0
-                    a.player.is_down_pressed = False
-                    a.player.is_jump_just_pressed = False
-                    a.player.is_jump_just_released = False
-
-                    # Flip overlay curtain dir
-                    self.overlay_inventory_curtain.flip_direction()
-
-                    # Prevent input here
-                    self.allow_inventory_input = False
+            # Inventory event
+            self.inventory.event(event)
 
     def draw(self):
         # Fill native surface color to have good contrast for player
         NATIVE_SURF.fill("#6bc5a0")
 
         if self.state == "playing":
-            # Draw player is done in room with other moving actors in draw bg and non moving actors
+            # Draw room
             a.room.draw()
 
             # Draw the mini map
@@ -160,7 +120,7 @@ class World:
 
         # Draw transition curtain
         elif self.state == "transition":
-            # Draw player is done in room with other moving actors in draw bg and non moving actors
+            # Draw room
             a.room.draw()
 
             # Draw the mini map
@@ -174,11 +134,27 @@ class World:
             # Draw player is done in room with other moving actors in draw bg and non moving actors
             a.room.draw()
 
-            # Draw the mini map
-            a.mini_map.draw(self.overlay_inventory_curtain.curtain)
+            # Draw inventory
+            self.inventory.draw()
 
-            # Draw overlay curtain
-            self.overlay_inventory_curtain.draw()
+        # # region Draw grid
+        # if a.game.is_debug == True:
+        #     for i in range(20):
+        #         offset = TILE_S * i
+        #         xd = (offset - a.camera.rect.x) % NATIVE_W
+        #         yd = (offset - a.camera.rect.y) % NATIVE_H
+        #         pg.draw.line(NATIVE_SURF, "grey4", (xd, 0), (xd, NATIVE_H))
+        #         pg.draw.line(NATIVE_SURF, "grey4", (0, yd), (NATIVE_W, yd))
+        #     xd = -a.camera.rect.x % NATIVE_W
+        #     yd = -a.camera.rect.y % NATIVE_H
+        #     pg.draw.line(NATIVE_SURF, "grey8", (xd, 0), (xd, NATIVE_H))
+        #     pg.draw.line(NATIVE_SURF, "grey8", (0, yd), (NATIVE_W, yd))
+        #     FONT.render_to(
+        #         NATIVE_SURF, (xd + FONT_W, yd + FONT_H), f"{
+        #             (a.camera.rect.x - 1) // NATIVE_W + 1}{
+        #             (a.camera.rect.y - 1) // NATIVE_H + 1}", "grey100"
+        #     )
+        # # endregion
 
     def update(self, dt):
         if self.state == "playing":
@@ -194,4 +170,38 @@ class World:
 
         elif self.state == "pause":
             # On pause state, immediately update overlay curtain
-            self.overlay_inventory_curtain.update(dt)
+            self.inventory.update(dt)
+
+    # Set state
+    def set_state(self, value):
+        old_state = self.state
+        self.state = value
+
+        # From playing
+        if old_state == "playing":
+            # To pause
+            if self.state == "pause":
+                # Set map to inventory
+                a.mini_map.set_state("inventory")
+
+            # To pause
+            elif self.state == "transition":
+                pass
+
+        # From transition
+        if old_state == "transition":
+            # To playing
+            if self.state == "playing":
+                # Reset transition curtain
+                self.transition_curtain.reset()
+
+            # Cannot go to pause
+
+        # From pause
+        if old_state == "pause":
+            # To playing
+            if self.state == "playing":
+                # Set map to gameplay
+                a.mini_map.set_state("gameplay")
+
+            # Impossible to go to transition
