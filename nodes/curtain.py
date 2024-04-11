@@ -15,12 +15,12 @@ class Curtain:
         4: Timer can go from 0 to 255 or 255 to 0 based on direction, update direction to go wherever you want
     '''
 
-    def __init__(self, duration, start="empty", max_alpha=255):
+    def __init__(self, duration, start="empty"):
         # Empty or full
         self.start = start
 
         # Max alpha
-        self.max_alpha = max_alpha
+        self.max_alpha = 255
 
         # Curtain init
         self.curtain = pg.Surface((NATIVE_W, NATIVE_H))

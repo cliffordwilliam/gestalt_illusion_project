@@ -37,7 +37,7 @@ class World:
         self.next_door = None
 
         # Inventory overlay
-        self.overlay_inventory_curtain = Curtain(80, "empty", 200)
+        self.overlay_inventory_curtain = Curtain(80, "empty")
         self.overlay_inventory_curtain.add_event_listener(
             self.on_overlay_inventory_curtain_empty_end, "empty_end")
         self.overlay_inventory_curtain.add_event_listener(
@@ -174,11 +174,11 @@ class World:
             # Draw player is done in room with other moving actors in draw bg and non moving actors
             a.room.draw()
 
+            # Draw the mini map
+            a.mini_map.draw(self.overlay_inventory_curtain.curtain)
+
             # Draw overlay curtain
             self.overlay_inventory_curtain.draw()
-
-            # Draw the mini map
-            a.mini_map.draw()
 
     def update(self, dt):
         if self.state == "playing":
